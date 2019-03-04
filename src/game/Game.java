@@ -1,7 +1,6 @@
 package game;
 
 import characters.*;
-import java.util.ArrayList;
 
 /**
  *
@@ -44,13 +43,5 @@ public class Game {
      */
     public void showScoreBoard() {
         // TODO - implement Game.showScoreBoard
-    }
-
-    /**
-     * Generate the Monsters for each level
-     */
-    public void renderMonsters() {        
-        ArrayList<Monster> monsterList = new ArrayList<>();
-        // TODO - implement Game.createMonster
     }
 }

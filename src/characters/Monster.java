@@ -1,5 +1,7 @@
 package characters;
 
+import java.util.ArrayList;
+
 public class Monster extends Character {
 
     private int level;
@@ -23,6 +25,13 @@ public class Monster extends Character {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+    /**
+     * Generate the Monsters for each level
+     */
+    public void renderMonsters() {        
+        ArrayList<Monster> monsterList = new ArrayList<>();
+        // TODO - implement Game.createMonster
     }
 
 }
