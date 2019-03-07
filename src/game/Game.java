@@ -1,6 +1,8 @@
 package game;
 
 import characters.*;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 /**
  *
@@ -8,12 +10,14 @@ import characters.*;
  * Student Number: 991517337
  * Date: February 27, 2019
  */
-public class Game {
+public class Game extends Application {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        // starts the program
+        launch(args);
         
         /*
         - get user input for name and weapon choice (choices stored in an enum data field)
@@ -43,5 +47,10 @@ public class Game {
      */
     public void showScoreBoard() {
         // TODO - implement Game.showScoreBoard
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        
     }
 }
