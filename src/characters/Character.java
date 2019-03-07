@@ -3,6 +3,7 @@ package characters;
 public abstract class Character {
 
     private final String name;
+    private int health;
     private int regeneration;
     private int attackStrength;
     private int blockStrength;
@@ -14,15 +15,20 @@ public abstract class Character {
      * @param attackStrength How much damage the Character's attack can do
      * @param blockStrength How strong the Character's block is
      */
-    public Character(String name, int regeneration, int attackStrength, int blockStrength) {
+    public Character(String name, int health, int regeneration, int attackStrength, int blockStrength) {
         this.name = name;
+        this.health = health;
         this.regeneration = regeneration;
         this.attackStrength = attackStrength;
         this.blockStrength = blockStrength;
     }
 
-    public String getName() {
-        return this.name;
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
     }
 
     public int getRegeneration() {
