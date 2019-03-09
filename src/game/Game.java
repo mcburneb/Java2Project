@@ -7,8 +7,6 @@ import javafx.stage.Stage;
 /**
  *
  * @author Brianna McBurney
- * Student Number: 991517337
- * Date: February 27, 2019
  */
 public class Game extends Application {
 

@@ -1,12 +1,12 @@
 package characters;
 
-public abstract class Character {
+public abstract class Character implements Attack{
 
     private final String name;
-    private int health;
     private int regeneration;
     private int attackStrength;
     private int blockStrength;
+    private int health;
 
     /**
      * 
@@ -14,21 +14,18 @@ public abstract class Character {
      * @param regeneration How much health the Character can regenerate at a time
      * @param attackStrength How much damage the Character's attack can do
      * @param blockStrength How strong the Character's block is
+     * @param health
      */
-    public Character(String name, int health, int regeneration, int attackStrength, int blockStrength) {
+    public Character(String name, int regeneration, int attackStrength, int blockStrength, int health) {
         this.name = name;
-        this.health = health;
         this.regeneration = regeneration;
         this.attackStrength = attackStrength;
         this.blockStrength = blockStrength;
-    }
-
-    public int getHealth() {
-        return health;
-    }
-
-    public void setHealth(int health) {
         this.health = health;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getRegeneration() {
@@ -54,23 +51,19 @@ public abstract class Character {
     public void setBlockStrength(int blockStrength) {
         this.blockStrength = blockStrength;
     }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
     
-    /**
-     * 
-     * @param character
-     * @return The outcome of the attack
-     */
-    public String attack(Character character) {
-        String attackMessage = "Attack happened";
-        // determine if its the player or monster attacking
-        if (character instanceof Monster ){
-            // remove the amount of the mosnters attack from the player health
-            // create message about the status of the attack
-        } else if (character instanceof Player) {
-            // remove the amount of the players attack from the monsters health
-            // create message about the status of the attack
-        }
-        return attackMessage;
+    @Override 
+    public int damage(int monsterHealth){
+        monsterHealth--;
+        return monsterHealth;
     }
     
     /**
