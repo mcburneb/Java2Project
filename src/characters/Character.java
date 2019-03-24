@@ -1,5 +1,8 @@
 package characters;
-
+/**
+ * 
+ * @author Brianna McBurney
+ */
 public abstract class Character implements Attack{
 
     private final String name;
@@ -67,7 +70,7 @@ public abstract class Character implements Attack{
     }
     
     /**
-     * 
+     * @author Brianna McBurney
      * @param character
      * @return The outcome of the regeneration
      */
@@ -77,17 +80,30 @@ public abstract class Character implements Attack{
         // determine if its the player or monster regenerating
         if (character instanceof Monster ){
             // add the regenerationAmount to the monsters health
-            // create message about the statuc of the regeneration
+            // create message about the status of the regeneration
+            
+            Monster monster = (Monster)character;
+            
+            this.health = monster.getHealth() + monster.getRegeneration();
+            
+            return "The monster renergated their health by " + monster.getRegeneration();
+            
         } else if (character instanceof Player) {
             // add the regenerationAmount to the players health
             // create message about the statuc of the regeneration
+            
+            Player player = (Player)character; 
+            
+            this.health = player.getHealth() + player.getRegeneration();
+            
+            return "YOu renergated your health by " + player.getRegeneration();
         }
         
         return regenMessage;
     }
     
     /**
-     * 
+     * @author Brianna McBurney
      * @param character
      * @return The outcome of the block
      */
@@ -105,13 +121,25 @@ public abstract class Character implements Attack{
     }
 
     /**
-     * 
+     * @author Brianna McBurney
      * @param player
      * @param stat The statistic that the player wishes to level up
      * @return The outcome of the leveling up
      */
     public String levelUp(Player player, String stat) {
-        // TODO - implement Character.levelUpRegeneration
+        switch (stat) {
+            case "Health":
+                player.setHealth(health + 20);
+                break;
+            case "Attack":
+                player.setAttackStrength(attackStrength + 20);
+                break;
+            case "Block":
+                player.setBlockStrength(blockStrength + 20);
+                break;
+            default:
+                break;
+        }
         return "You have sucessfully leveled up your " + stat;
     }
 }

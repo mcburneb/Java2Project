@@ -2,6 +2,10 @@ package characters;
 
 import java.util.ArrayList;
 
+/**
+ * 
+ * @author Brianna McBurney
+ */
 public class Monster extends Character {
 
     private int level;
@@ -29,6 +33,7 @@ public class Monster extends Character {
     public void setLevel(int level) {
         this.level = level;
     }
+    
     /**
      * Generate the Monsters for each level
      */
