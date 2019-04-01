@@ -5,7 +5,7 @@ package characters;
  */
 public abstract class Character implements Attack{
 
-    private final String name;
+    private String name;
 
     /**
      * 
@@ -13,6 +13,10 @@ public abstract class Character implements Attack{
      */
     public Character(String name) {
         this.name = name;
+    }
+    
+    public Character() {
+        
     }
 
     public String getName() {

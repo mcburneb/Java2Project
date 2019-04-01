@@ -1,19 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package game;
 
 import characters.Attack;
 import characters.Monster;
 import characters.Player;
+import java.util.ArrayList;
 import java.util.Random;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -42,7 +37,7 @@ import javafx.util.Duration;
  * @author Mostafa
  */
 public class Game extends Application implements Attack {
-    
+
     private Stage startUpStage;
 
     private TextField playerName;
@@ -56,28 +51,28 @@ public class Game extends Application implements Attack {
     private Label gameName;
 
     private String playerName1;
+    private Player playerOfChoice;
+    private Label playerOfChoiceLbl;
 
     private VBox startPageLayout;
-
-    private Stage startupStage;
 
     private HBox modeNjoin;
     private VBox gameLayoutLeft;
     private VBox gameLayoutRight;
 
-    private ComboBox<String> playMode;
+    private ComboBox<String> characterOption;
 
     private Scene scene;
 
     private ImageView hero;
-    private ImageView monster ;
+    private ImageView monster;
 
     private ListView<Label> heroInfo;
 
     private final Integer startTime = 20;
     private Integer seconds = startTime;
     private Label timeLabel;
-    
+
     private Timeline timeline;
     private final Random random = new Random();
 
@@ -89,32 +84,63 @@ public class Game extends Application implements Attack {
         startPageLayout.setStyle("-fx-background-color: black");
         startPageLayout.setPadding(new Insets(20));
 
-        gameName = new Label("MONSTER\n          COMBAT");
-        gameName.setFont(Font.loadFont("file:resources/font/DragonForcE.ttf", 60));
+        gameName = new Label("MONSTER COMBAT");
+        gameName.setFont(Font.loadFont("file:resources/font/DragonForcE.ttf", 150));
         gameName.setTextFill(Color.web("#0076a9"));
 
         playerName = new TextField();
-        playerName.setStyle("-fx-border-color: blue;" + "-fx-background-color: Red");
+        playerName.setStyle("-fx-border-color: blue;" + "-fx-background-color: lightblue");
         playerName.setPromptText("Enter your name");
 
         modeNjoin = new HBox(20);
 
-        playMode = new ComboBox<>();
-        playMode.setPrefWidth(160);
-        String[] playChoices = {"single player", "two player"};
-        ObservableList playChoice = FXCollections.observableArrayList(playChoices);
-        playMode.setItems(playChoice);
-        playMode.getSelectionModel().select(0);
+        playerOfChoiceLbl = new Label("Choose a player");
+        
+        // create the player options to display 
+        ArrayList<Player> playerList = null;
+        Player p = new Player();
+        playerList = p.getPlayers();
+        
+        ImageView p1Image = new ImageView(playerList.get(0).getImagePath());
+        p1Image.setFitHeight(400);
+        p1Image.setFitWidth(400);
+        Player p1 = playerList.get(0);
+        p1Image.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+            // set the selected player as the player of choice
+            setPlayerOfChoise(p1);
+        });
+        
+        ImageView p2Image = new ImageView(playerList.get(1).getImagePath());
+        p2Image.setFitHeight(400);
+        p2Image.setFitWidth(400);
+        Player p2 = playerList.get(1);
+        p2Image.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+            // set the selected player as the player of choice
+            setPlayerOfChoise(p2);
+        });
+        
+        ImageView p3Image = new ImageView(playerList.get(2).getImagePath());
+        p3Image.setFitHeight(400);
+        p3Image.setFitWidth(400);
+        Player p3 = playerList.get(2);
+        p3Image.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+            // set the selected player as the player of choice
+            setPlayerOfChoise(p3);
+        });
+        
+        // grade HBox to hold player options and add the players Images to it
+        HBox playerImages = new HBox();
+        playerImages.getChildren().addAll(p1Image, p2Image, p3Image);
 
         join = new Button("Join");
         join.setOnAction(e -> onJoinClick(startUpStage));
         join.setPrefWidth(160);
 
-        modeNjoin.getChildren().addAll(playMode, join);
+        modeNjoin.getChildren().add(join);
 
-        startPageLayout.getChildren().addAll(gameName, playerName, modeNjoin);
+        startPageLayout.getChildren().addAll(gameName, playerName, playerOfChoiceLbl, playerImages, modeNjoin);
 
-        scene = new Scene(startPageLayout, 380, 300);
+        scene = new Scene(startPageLayout, 1450, 950);
         startUpStage.setScene(scene);
 
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds(); //to make the stage center
@@ -129,11 +155,6 @@ public class Game extends Application implements Attack {
         levelNum = new Label();
         playerNameOnScreenDisplay = new Label();
 
-        //hero ImageView
-        hero = new ImageView("file:resources/pictures/hero/hero.png");
-        hero.setFitHeight(650);
-        hero.setFitWidth(650);
-
         heroInfo = new ListView<>();
         heroInfo.getItems().add(playerNameOnScreenDisplay);
 
@@ -145,19 +166,16 @@ public class Game extends Application implements Attack {
 
         //hero information framework
         StackPane heroInfoLayout = new StackPane();
-        gameLayoutLeft.getChildren().addAll(levelNum, hero, playerNameOnScreenDisplay, heroInfo);
+        gameLayoutLeft.getChildren().addAll(levelNum, playerNameOnScreenDisplay, heroInfo);
 
         gameLayoutRight = new VBox();
         gameLayoutRight.setPadding(new Insets(10));
 
-        monster = new ImageView("file:resources/pictures/monsters/monster.png");
-        
-        
-        
+        monster = new ImageView("file:resources/pictures/monsters/monster1.png");
+
         monster.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> onMonsterClick());
         monster.setFitHeight(100);
         monster.setFitWidth(100);
-        
 
         HBox gameLayoutOriginal = new HBox();
         gameLayoutOriginal.setPadding(new Insets(10));
@@ -185,16 +203,18 @@ public class Game extends Application implements Attack {
             playerNameOnScreenDisplay.setText(playerName1);
 
         }
-        
+
         //init timeline
         timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
 
         AnchorPane root = new AnchorPane(monster);
-        gameLayoutRight.getChildren().add( root);
+        gameLayoutRight.getChildren().add(root);
         keyFrameAction();
         
+
     }
+
     private void keyFrameAction() {
         // generate next random start and end positions for star
         Pos startPos = getRandomPos();
@@ -210,7 +230,7 @@ public class Game extends Application implements Attack {
         // restart timeline with new values
         timeline.stop();
         timeline.getKeyFrames().clear();
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(1000),
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(2000),
                 (e) -> keyFrameAction()));
         timeline.play();
     }
@@ -225,7 +245,22 @@ public class Game extends Application implements Attack {
     }
 
     private void onMonsterClick() {
-        System.out.println("attack");    
+        System.out.println("attack");
+    }
+
+    private ImageView comboAction() {
+        if ("Fire Eyes".equals(characterOption.getValue())) {
+            //hero ImageView
+            hero = new ImageView("file:resources/pictures/hero/fireEye.png");
+            hero.setFitHeight(650);
+            hero.setFitWidth(650);
+        } else {
+            hero = new ImageView("file:resources/pictures/hero/megaMan.png");
+            hero.setFitHeight(650);
+            hero.setFitWidth(650);
+
+        }
+        return hero;
     }
 
     private class Pos {
@@ -234,15 +269,15 @@ public class Game extends Application implements Attack {
         int y;
     }
 
-    @Override 
-    public int damage(Player player, Monster monster){
+    @Override
+    public int damage(Player player, Monster monster) {
         int playerAttack = player.getAttackStrength();
         int monsterHealth = monster.getHealth();
-        
+
         int newHealth = monsterHealth - playerAttack;
-        
+
         monster.setHealth(newHealth);
-        
+
         return newHealth;
     }
 
@@ -263,6 +298,8 @@ public class Game extends Application implements Attack {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setHeaderText("time is up");
                     alert.show();
+                    timeline.stop();
+
                 }
             }
 
@@ -271,4 +308,15 @@ public class Game extends Application implements Attack {
         time.playFromStart();
     }
 
+    /**
+     * @author Brianna McBurney
+     * 
+     * @param chosenPlayer The player the user has clicked on
+     */
+    private void setPlayerOfChoise(Player chosenPlayer) {
+        // set the selected player as the plater of choice
+        playerOfChoice = chosenPlayer;
+        playerOfChoiceLbl.setText(chosenPlayer.getName());
+            
+    }
 }

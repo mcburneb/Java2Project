@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.stage.FileChooser;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -21,9 +20,9 @@ import org.json.simple.parser.ParseException;
  */
 public class Monster extends Character {
 
-    private final int level;
+    private int level;
     private int health;
-    private final String imagePath;
+    private String imagePath;
     
     private ArrayList<Monster> monsterArray;
 
