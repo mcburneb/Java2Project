@@ -1,6 +1,5 @@
 package game;
 
-import characters.Attack;
 import characters.Monster;
 import characters.Player;
 import java.util.ArrayList;
@@ -46,16 +45,17 @@ public class Game extends Application {
 
     private Scene game;
 
-    private Label levelCount;
-    private Label playerNameOnScreenDisplay;
+    private int levelCount;
+    
+    private Label levelLbl;
+    private Label playerNameLbl;
     private Label gameName;
     private Label playerOfChoiceLbl;
     private Label timeLabel;
     private Label monsterHealthLbl;
-
-    private String playerName1;
     
     private Player playerOfChoice;
+    private Monster currentMonster;
 
     private VBox startPageLayout;
     private HBox modeNjoin;
@@ -64,10 +64,10 @@ public class Game extends Application {
 
     private Scene scene;
 
-    private ImageView heroImage;
-    private ImageView monster;
+    private ImageView playerImage;
+    private ImageView monsterImage;
 
-    private ListView<Label> heroInfo;
+    private ListView<Label> playerInfo;
 
     private final Integer startTime = 20;
     private Integer seconds = startTime;
@@ -151,47 +151,43 @@ public class Game extends Application {
         gameLayoutLeft = new VBox();
         gameLayoutLeft.setPadding(new Insets(10));
 
-        levelCount = new Label();
-        playerNameOnScreenDisplay = new Label();
+        levelLbl = new Label("Level 1");
+        playerNameLbl = new Label();
 
-        heroInfo = new ListView<>();
-        heroInfo.getItems().add(playerNameOnScreenDisplay);
+        playerInfo = new ListView<>();
+        playerInfo.getItems().add(levelLbl);
+        playerInfo.getItems().add(playerNameLbl);
 
         timeLabel = new Label("ramaining time: 20");
-
-        heroImage = new ImageView();
-        heroImage.setFitHeight(500);
-        heroImage.setFitWidth(400);
+        
+        playerImage = new ImageView("file:resources\\pictures\\monsters\\png\\monster-1.png");
+        playerImage.setFitHeight(500);
+        playerImage.setFitWidth(400);
         
         monsterHealthLbl = new Label("Monster Health");
 
-        heroInfo.getItems().add(timeLabel);
-        heroInfo.getItems().add(monsterHealthLbl);
+        playerInfo.getItems().add(timeLabel);
+        playerInfo.getItems().add(monsterHealthLbl);
 
-        //hero information framework
-        gameLayoutLeft.getChildren().addAll(levelCount, playerNameOnScreenDisplay, heroInfo); //, heroImage);
+        //player information framework
+        gameLayoutLeft.getChildren().addAll(playerNameLbl, playerInfo, playerImage);
 
         gameLayoutRight = new VBox();
         gameLayoutRight.setPadding(new Insets(10));
 
         
-//        Monster m = new Monster();
-//        int level = 1;
-//        Monster currentMosnter = m.getMonsters(level);
-//        
-//        monster = new ImageView(currentMosnter.getImagePath());
-        monster = new ImageView("file:resources\\pictures\\monsters\\png\\monster-1.png");
-        
         Monster m = new Monster();
+        currentMonster = m.getMonsters(levelCount);
+        monsterImage = new ImageView(currentMonster.getImagePath());
 
-        monster.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+        monsterImage.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             int newMonsterHealth = m.damage(playerOfChoice, m);
             String stringMonsterHealth = String.valueOf(newMonsterHealth);
             System.out.println(stringMonsterHealth);
             monsterHealthLbl.setText(stringMonsterHealth);
         });
-        monster.setFitHeight(100);
-        monster.setFitWidth(100);
+        monsterImage.setFitHeight(100);
+        monsterImage.setFitWidth(100);
 
         HBox gameLayoutOriginal = new HBox();
         gameLayoutOriginal.setPadding(new Insets(10));
@@ -210,21 +206,29 @@ public class Game extends Application {
     }
 
     public void onJoinClick(Stage startUpStage) {
+        // make sure the user has entered a name for their player
         if (playerName.getText().isEmpty()) {
             AlertBox.informAlert("Game Requairements", "You need to enter a name \nbefor joining the game");
         } else {
-
-            playerName1 = playerName.getText();
+            // get input from the user for their players name
+            String playerNameValue = playerName.getText();
+            
+            // change Players name to the input
+            playerOfChoice.setName(playerNameValue);
+            
+            // show the players name in the label that is added to the ListView
+            playerNameLbl.setText(playerNameValue);
+            
             startUpStage.setScene(game);
-            playerNameOnScreenDisplay.setText(playerName1);
+            
             doTime();
         }
 
-        //init timeline
+        // init timeline
         timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
 
-        AnchorPane root = new AnchorPane(monster);
+        AnchorPane root = new AnchorPane(monsterImage);
         gameLayoutRight.getChildren().add(root);
         keyFrameAction();
         
@@ -232,13 +236,13 @@ public class Game extends Application {
     }
 
     private void keyFrameAction() {
-        // generate next random start and end positions for monster
+        // generate next random start and end positions for monsterImage
         Pos startPos = getRandomPos();
         Pos endPos = getRandomPos();
 
         // initial values (resetting)
-        monster.setLayoutX(startPos.x);
-        monster.setLayoutY(startPos.y);
+        monsterImage.setLayoutX(startPos.x);
+        monsterImage.setLayoutY(startPos.y);
         
         TranslateTransition transition = new TranslateTransition();
         
@@ -247,12 +251,12 @@ public class Game extends Application {
         transition.setToY(endPos.y);
         transition.setCycleCount(Animation.INDEFINITE);
         transition.setAutoReverse(true);
-        transition.setNode(monster);
+        transition.setNode(monsterImage);
         transition.play();
         
-        monster.setScaleX(1);
-        monster.setScaleY(1);
-        monster.setOpacity(1);
+        monsterImage.setScaleX(1);
+        monsterImage.setScaleY(1);
+        monsterImage.setOpacity(1);
 
         // restart timeline with new values
         timeline.stop();
@@ -269,10 +273,6 @@ public class Game extends Application {
         p.x = x + 100;
         p.y = y + 100;
         return p;
-    }
-
-    private void onMonsterClick() {
-        System.out.println("attack");
     }
 
     private class Pos {
@@ -321,6 +321,28 @@ public class Game extends Application {
             
         Image image = new Image(playerOfChoice.getImagePath());
         
-//        playerImage.setImage(image);
+        playerImage.setImage(image);
+    }
+    
+    /**
+     * @author Brianna McBurney
+     */
+    private void changeLevels() {
+        Monster m = new Monster();
+        
+        levelCount = levelCount+1;
+        
+        // get the monsterImage for the next nevel
+        currentMonster = m.getMonsters(levelCount);
+        
+        // update ImageView with new monsterImage for next level
+        monsterImage = new ImageView(currentMonster.getImagePath());
+        
+        // update the lable that displays the current level
+        levelLbl.setText("Level " + String.valueOf(levelCount));
+        
+        // increase the players attackStrength
+        Player p = new Player();
+        p.levelUp(playerOfChoice);
     }
 }

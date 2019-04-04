@@ -11,7 +11,6 @@ import java.util.Comparator;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -39,11 +38,12 @@ public class Score {
     }
     
     /**
-     * @author Brianna McBurney
+     * get the high scores from the file
      * 
-     * @param selectedFile
+     * TO DO: display the scores in a GUI
      */
-    public void getHighScores(File selectedFile) {
+    public void getHighScores() {
+        File selectedFile = new File("file:resources\\files\\highScores.json");
         
         ArrayList<JSONObject> scoreList = new ArrayList<>();
         if (selectedFile == null) return;
@@ -65,9 +65,7 @@ public class Score {
                 scoreList.add((JSONObject) highScores.get(i));
             }
             
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Score.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
+        } catch (FileNotFoundException | ParseException ex) {
             Logger.getLogger(Score.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -97,51 +95,14 @@ public class Score {
     }
     
     /**
-     * @author Brianna McBurney
+     * Adding a new score to the High Score file
      * 
-     * @param primaryStage     * 
-     * @return  
+     * @param name The name the user provided at the start of the game
+     * @param score The total score the user has accumulated
      */
-    public File openFile(Stage primaryStage) {
-
-        String MCfolder = System.getProperty("user.home") + "\\Desktop\\MonsterCombat";
-        String MCfile = MCfolder+"\\highScores.json";
+    public void addNewScore(String name, String score){
+        File selectedFile = new File("file:resources\\files\\highScores.json");
         
-        File folder = new File(MCfolder);
-        
-        File file = new File(MCfile);
-        
-        // check if there is already a folder to store the high scores
-        if (! folder.isDirectory()){
-            // if theres no folder create the folder
-            new File(MCfolder).mkdirs();
-            
-            // add file to store the high scores in
-            try {
-                file.createNewFile();
-            } catch (IOException ex) {
-                Logger.getLogger(Score.class.getName()).log(Level.SEVERE, null, ex);
-            }
-                      
-        } else {
-            // check if the folder contains the file to store the high scores in
-            if (! file.exists()) {
-                
-                // if it doesnt exist create a new file in the right folder
-                try {
-                    file.createNewFile();
-                } catch (IOException ex) {
-                    Logger.getLogger(Score.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } 
-        }
-        
-        File selectedFile = new File(MCfile);
-        
-        return selectedFile; 
-    }
-    
-    public void addNewScore(File selectedFile, String name, String score){
         JSONArray updatedScoreList = new JSONArray();
         if (selectedFile == null) return;
         try {
@@ -197,9 +158,7 @@ public class Score {
                 }
             }
             
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Score.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
+        } catch (FileNotFoundException | ParseException ex) {
             Logger.getLogger(Score.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

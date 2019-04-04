@@ -39,8 +39,6 @@ public class Player extends Character {
     }    
     
     /**
-     * @author Brianna McBurney
-     * 
      * @param player
      * @param monster
      * @return The monsters new health
@@ -58,15 +56,11 @@ public class Player extends Character {
     }
     
     /**
-     * @author Brianna McBurney
      * @param player
-     * @return The outcome of the leveling up
      */
-    public String levelUp(Player player) {
+    public void levelUp(Player player) {
         
-        player.setAttackStrength(attackStrength + 2);
-        
-        return "You have sucessfully leveled up your attack";
+        player.setAttackStrength(attackStrength + 4 );
     }
     
     public ArrayList<Player> getPlayers() {
