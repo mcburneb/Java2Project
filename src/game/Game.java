@@ -16,11 +16,11 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -54,6 +54,7 @@ public class Game extends Application implements Attack {
     private String playerName1;
     
     private Player playerOfChoice;
+    private ImageView playerImage;
 
     private VBox startPageLayout;
     private HBox modeNjoin;
@@ -157,12 +158,14 @@ public class Game extends Application implements Attack {
 
         timeLabel = new Label("ramaining time: 20");
 
-        
+        playerImage = new ImageView();
+        playerImage.setFitHeight(500);
+        playerImage.setFitWidth(400);
 
         heroInfo.getItems().add(timeLabel);
 
         //hero information framework
-        gameLayoutLeft.getChildren().addAll(levelCount, playerNameOnScreenDisplay, heroInfo);
+        gameLayoutLeft.getChildren().addAll(levelCount, playerNameOnScreenDisplay, heroInfo, playerImage);
 
         gameLayoutRight = new VBox();
         gameLayoutRight.setPadding(new Insets(10));
@@ -288,9 +291,7 @@ public class Game extends Application implements Attack {
                 if (seconds <= 0) {
                     time.stop();
                     
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText("time is up");
-                    alert.show();
+                    AlertBox.informAlert("","time is up");
                     timeline.stop();
 
                 }
@@ -310,6 +311,10 @@ public class Game extends Application implements Attack {
         // set the selected player as the plater of choice
         playerOfChoice = chosenPlayer;
         playerOfChoiceLbl.setText(chosenPlayer.getName());
+        
+        Image image = new Image(playerOfChoice.getImagePath());
+        
+        playerImage.setImage(image);
             
     }
 }
