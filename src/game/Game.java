@@ -16,6 +16,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -36,7 +37,7 @@ import javafx.util.Duration;
  *
  * @author Mostafa
  */
-public class Game extends Application implements Attack {
+public class Game extends Application {
     
 
     private TextField playerName;
@@ -50,11 +51,11 @@ public class Game extends Application implements Attack {
     private Label gameName;
     private Label playerOfChoiceLbl;
     private Label timeLabel;
+    private Label monsterHealthLbl;
 
     private String playerName1;
     
     private Player playerOfChoice;
-    private ImageView playerImage;
 
     private VBox startPageLayout;
     private HBox modeNjoin;
@@ -63,7 +64,7 @@ public class Game extends Application implements Attack {
 
     private Scene scene;
 
-    private ImageView hero;
+    private ImageView heroImage;
     private ImageView monster;
 
     private ListView<Label> heroInfo;
@@ -158,21 +159,37 @@ public class Game extends Application implements Attack {
 
         timeLabel = new Label("ramaining time: 20");
 
-        playerImage = new ImageView();
-        playerImage.setFitHeight(500);
-        playerImage.setFitWidth(400);
+        heroImage = new ImageView();
+        heroImage.setFitHeight(500);
+        heroImage.setFitWidth(400);
+        
+        monsterHealthLbl = new Label("Monster Health");
 
         heroInfo.getItems().add(timeLabel);
+        heroInfo.getItems().add(monsterHealthLbl);
 
         //hero information framework
-        gameLayoutLeft.getChildren().addAll(levelCount, playerNameOnScreenDisplay, heroInfo, playerImage);
+        gameLayoutLeft.getChildren().addAll(levelCount, playerNameOnScreenDisplay, heroInfo); //, heroImage);
 
         gameLayoutRight = new VBox();
         gameLayoutRight.setPadding(new Insets(10));
 
-        monster = new ImageView("file:resources/pictures/monsters/monster1.png");
+        
+//        Monster m = new Monster();
+//        int level = 1;
+//        Monster currentMosnter = m.getMonsters(level);
+//        
+//        monster = new ImageView(currentMosnter.getImagePath());
+        monster = new ImageView("file:resources\\pictures\\monsters\\png\\monster-1.png");
+        
+        Monster m = new Monster();
 
-        monster.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> onMonsterClick());
+        monster.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            int newMonsterHealth = m.damage(playerOfChoice, m);
+            String stringMonsterHealth = String.valueOf(newMonsterHealth);
+            System.out.println(stringMonsterHealth);
+            monsterHealthLbl.setText(stringMonsterHealth);
+        });
         monster.setFitHeight(100);
         monster.setFitWidth(100);
 
@@ -264,18 +281,6 @@ public class Game extends Application implements Attack {
         int y;
     }
 
-    @Override
-    public int damage(Player player, Monster monster) {
-        int playerAttack = player.getAttackStrength();
-        int monsterHealth = monster.getHealth();
-
-        int newHealth = monsterHealth - playerAttack;
-
-        monster.setHealth(newHealth);
-
-        return newHealth;
-    }
-
     private void doTime() {
         Timeline time = new Timeline();
         time.setCycleCount(Timeline.INDEFINITE);
@@ -291,7 +296,9 @@ public class Game extends Application implements Attack {
                 if (seconds <= 0) {
                     time.stop();
                     
-                    AlertBox.informAlert("","time is up");
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText("time is up");
+                    alert.show();
                     timeline.stop();
 
                 }
@@ -311,10 +318,9 @@ public class Game extends Application implements Attack {
         // set the selected player as the plater of choice
         playerOfChoice = chosenPlayer;
         playerOfChoiceLbl.setText(chosenPlayer.getName());
-        
+            
         Image image = new Image(playerOfChoice.getImagePath());
         
-        playerImage.setImage(image);
-            
+//        playerImage.setImage(image);
     }
 }

@@ -72,9 +72,9 @@ public class Player extends Character {
     public ArrayList<Player> getPlayers() {
         ArrayList<Player> playerList = new ArrayList<>();
         
-        Player p1 = new Player("Player 1", 5, "file:resources/pictures/player/player1.png");
-        Player p2 = new Player("Player 2", 6, "file:resources/pictures/player/player2.png");
-        Player p3 = new Player("Player 3", 7, "file:resources/pictures/player/player3.png");
+        Player p1 = new Player("Player 1", 5, "file:resources\\pictures\\player\\player1.png");
+        Player p2 = new Player("Player 2", 6, "file:resources\\pictures\\player\\player2.png");
+        Player p3 = new Player("Player 3", 7, "file:resources\\pictures\\player\\player3.png");
         
         playerList.add(p1);
         playerList.add(p2);
