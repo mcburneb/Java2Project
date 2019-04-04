@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.image.Image;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -25,6 +26,7 @@ public class Monster extends Character {
     private String imagePath;
     
     private ArrayList<Monster> monsterArray;
+    private ArrayList<Image> monsterImageArray;
 
     /**
      * Creates a Monster for the Player to fight.
@@ -38,6 +40,10 @@ public class Monster extends Character {
         this.level = level;
         this.health = health;
         this.imagePath = imagePath;
+    }
+    
+    public Monster() {
+        
     }
 
     public int getLevel() {
@@ -137,14 +143,34 @@ public class Monster extends Character {
         // initialize ArrayList to hold monsters
         monsterArray = new ArrayList<>();
         
+        // intialize ArrayList to hold monster images
+        monsterImageArray = new ArrayList<>();
+        
         // create the monsters
         for (int i=1; i <= 30; i++) {
+            // set the amount of health the monster will have
             int monsterHealth = i*5;
+            
+            // create the path to the monster's image
             String path = "file:resources/pictures/monsters/monster" + i + ".png";
             
+            // create the new Monster
             Monster monster = new Monster("Monster1", i, monsterHealth, path);
             
+            // add the monster to the array
             monsterArray.add(monster);
+            
+            // create ImageView to hold the picture for the monster
+            Image monsterView = new Image(path);
+            
+//            System.out.println(monsterView);
+            
+            try {
+                // add the monster's ImageView to th arrray
+                monsterImageArray.add(monsterView);
+            } catch (NullPointerException ex) {
+                System.out.println(ex.toString());
+            }
         }
         
         // Create the ArrayList to hold the monsters to add to the file

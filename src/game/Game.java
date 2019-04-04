@@ -5,8 +5,10 @@ import characters.Monster;
 import characters.Player;
 import java.util.ArrayList;
 import java.util.Random;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
@@ -16,7 +18,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -28,7 +29,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
@@ -37,8 +37,7 @@ import javafx.util.Duration;
  * @author Mostafa
  */
 public class Game extends Application implements Attack {
-
-    private Stage startUpStage;
+    
 
     private TextField playerName;
 
@@ -46,21 +45,20 @@ public class Game extends Application implements Attack {
 
     private Scene game;
 
-    private Label levelNum;
+    private Label levelCount;
     private Label playerNameOnScreenDisplay;
     private Label gameName;
+    private Label playerOfChoiceLbl;
+    private Label timeLabel;
 
     private String playerName1;
+    
     private Player playerOfChoice;
-    private Label playerOfChoiceLbl;
 
     private VBox startPageLayout;
-
     private HBox modeNjoin;
     private VBox gameLayoutLeft;
     private VBox gameLayoutRight;
-
-    private ComboBox<String> characterOption;
 
     private Scene scene;
 
@@ -71,7 +69,6 @@ public class Game extends Application implements Attack {
 
     private final Integer startTime = 20;
     private Integer seconds = startTime;
-    private Label timeLabel;
 
     private Timeline timeline;
     private final Random random = new Random();
@@ -152,21 +149,20 @@ public class Game extends Application implements Attack {
         gameLayoutLeft = new VBox();
         gameLayoutLeft.setPadding(new Insets(10));
 
-        levelNum = new Label();
+        levelCount = new Label();
         playerNameOnScreenDisplay = new Label();
 
         heroInfo = new ListView<>();
         heroInfo.getItems().add(playerNameOnScreenDisplay);
 
-        timeLabel = new Label();
+        timeLabel = new Label("ramaining time: 20");
 
-        doTime();
+        
 
         heroInfo.getItems().add(timeLabel);
 
         //hero information framework
-        StackPane heroInfoLayout = new StackPane();
-        gameLayoutLeft.getChildren().addAll(levelNum, playerNameOnScreenDisplay, heroInfo);
+        gameLayoutLeft.getChildren().addAll(levelCount, playerNameOnScreenDisplay, heroInfo);
 
         gameLayoutRight = new VBox();
         gameLayoutRight.setPadding(new Insets(10));
@@ -195,13 +191,13 @@ public class Game extends Application implements Attack {
 
     public void onJoinClick(Stage startUpStage) {
         if (playerName.getText().isEmpty()) {
-            AlertBox.display("Game Requairements", "You need to enter a name \nbefor joining the game");
+            AlertBox.informAlert("Game Requairements", "You need to enter a name \nbefor joining the game");
         } else {
 
             playerName1 = playerName.getText();
             startUpStage.setScene(game);
             playerNameOnScreenDisplay.setText(playerName1);
-
+            doTime();
         }
 
         //init timeline
@@ -216,13 +212,24 @@ public class Game extends Application implements Attack {
     }
 
     private void keyFrameAction() {
-        // generate next random start and end positions for star
+        // generate next random start and end positions for monster
         Pos startPos = getRandomPos();
         Pos endPos = getRandomPos();
 
         // initial values (resetting)
         monster.setLayoutX(startPos.x);
         monster.setLayoutY(startPos.y);
+        
+        TranslateTransition transition = new TranslateTransition();
+        
+        transition.setDuration(Duration.seconds(2));
+        transition.setToX(endPos.x);
+        transition.setToY(endPos.y);
+        transition.setCycleCount(Animation.INDEFINITE);
+        transition.setAutoReverse(true);
+        transition.setNode(monster);
+        transition.play();
+        
         monster.setScaleX(1);
         monster.setScaleY(1);
         monster.setOpacity(1);
@@ -246,21 +253,6 @@ public class Game extends Application implements Attack {
 
     private void onMonsterClick() {
         System.out.println("attack");
-    }
-
-    private ImageView comboAction() {
-        if ("Fire Eyes".equals(characterOption.getValue())) {
-            //hero ImageView
-            hero = new ImageView("file:resources/pictures/hero/fireEye.png");
-            hero.setFitHeight(650);
-            hero.setFitWidth(650);
-        } else {
-            hero = new ImageView("file:resources/pictures/hero/megaMan.png");
-            hero.setFitHeight(650);
-            hero.setFitWidth(650);
-
-        }
-        return hero;
     }
 
     private class Pos {
@@ -295,6 +287,7 @@ public class Game extends Application implements Attack {
                 timeLabel.setText("remaining time: " + seconds.toString());
                 if (seconds <= 0) {
                     time.stop();
+                    
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setHeaderText("time is up");
                     alert.show();
