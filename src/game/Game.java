@@ -160,9 +160,9 @@ public class Game extends Application {
 
         timeLabel = new Label("ramaining time: 20");
         
-        playerImage = new ImageView("file:resources\\pictures\\monsters\\png\\monster-1.png");
-        playerImage.setFitHeight(500);
-        playerImage.setFitWidth(400);
+        playerImage = new ImageView("file:resources\\pictures\\player\\player1.png");
+        playerImage.setFitHeight(100);
+        playerImage.setFitWidth(100);
         
         monsterHealthLbl = new Label("Monster Health");
 
@@ -170,15 +170,16 @@ public class Game extends Application {
         playerInfo.getItems().add(monsterHealthLbl);
 
         //player information framework
-        gameLayoutLeft.getChildren().addAll(playerNameLbl, playerInfo, playerImage);
+        gameLayoutLeft.getChildren().addAll(playerImage, playerInfo);
 
         gameLayoutRight = new VBox();
         gameLayoutRight.setPadding(new Insets(10));
 
         
         Monster m = new Monster();
-        currentMonster = m.getMonsters(levelCount);
-        monsterImage = new ImageView(currentMonster.getImagePath());
+//        currentMonster = m.getMonsters(levelCount);
+        
+        monsterImage = new ImageView("file:resources\\pictures\\player\\player1.png");
 
         monsterImage.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             int newMonsterHealth = m.damage(playerOfChoice, m);
@@ -319,9 +320,9 @@ public class Game extends Application {
         playerOfChoice = chosenPlayer;
         playerOfChoiceLbl.setText(chosenPlayer.getName());
             
-        Image image = new Image(playerOfChoice.getImagePath());
+//        Image image = new Image(playerOfChoice.getImagePath());
         
-        playerImage.setImage(image);
+//        playerImage.setImage(image);
     }
     
     /**

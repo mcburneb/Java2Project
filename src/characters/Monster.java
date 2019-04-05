@@ -84,7 +84,8 @@ public class Monster extends Character {
      * Licensed by Creative Commons 3.0 BY (http://creativecommons.org/licenses/by/3.0/)
      */
     public Monster getMonsters(int currentLevel) {        
-        File selectedFile = new File("file:resources\\files\\monsterArray.json");
+        File selectedFile = new File("C:\\Users\\banan\\Documents\\NetBeansProjects\\Java 2 Project\\MonsterCombat\\resources\\files\\monsterArray.json");
+//        File selectedFile = new File("file:resources\\files\\monsterArray.json");
         
         // initialize a Monster object to hold the monster for the current level
         Monster monster = null;
@@ -92,43 +93,47 @@ public class Monster extends Character {
         // Create the ArrayList to hold the Monsters read from the file
         ArrayList<JSONObject> monstersFromFile = new ArrayList<>();
 
-        try {
-            // Create a scanner to open on the file the user selected
-            Scanner input = new Scanner(selectedFile);
+        if (selectedFile.exists()) {
+            try {
+                // Create a scanner to open on the file the user selected
+                Scanner input = new Scanner(selectedFile);
 
-            // Create a StringBuilder to add the contents of the file to
-            StringBuilder builder = new StringBuilder();
+                // Create a StringBuilder to add the contents of the file to
+                StringBuilder builder = new StringBuilder();
 
-            // loop through and read each line of the file
-            while (input.hasNextLine()) {
-                builder.append(input.nextLine());
+                // loop through and read each line of the file
+                while (input.hasNextLine()) {
+                    builder.append(input.nextLine());
+                }
+
+                JSONParser parser = new JSONParser();
+                JSONObject root = (JSONObject) parser.parse(builder.toString());
+
+                // Create JSONArray to hold the Courses from the file
+                JSONArray monstsers = (JSONArray) root.get("monsters");
+
+                // Add each of the Courses to the ArrayList 
+                for (int i = 0; i < monstsers.size(); i++) {
+                    monstersFromFile.add((JSONObject) monstsers.get(i));
+                }
+
+                // get the Monster for the level the game is at
+                JSONObject entry = (JSONObject) monstersFromFile.get(currentLevel);
+
+                // get values of the Monster's name, level, health, and image file path
+                String monsterName = (String) entry.get("name");
+                Long monsterLevel = (Long) entry.get("level");
+                Long monsterHealth = (Long) entry.get("health");
+                String monsterImagePath = (String) entry.get("image path");
+
+                // create a Course with the name and grade
+                monster = new Monster(monsterName, monsterLevel.intValue(), monsterHealth.intValue(), monsterImagePath);
+
+            } catch (FileNotFoundException | ParseException ex) {
+                Logger.getLogger(Monster.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            JSONParser parser = new JSONParser();
-            JSONObject root = (JSONObject) parser.parse(builder.toString());
-
-            // Create JSONArray to hold the Courses from the file
-            JSONArray monstsers = (JSONArray) root.get("courses");
-
-            // Add each of the Courses to the ArrayList 
-            for (int i = 0; i < monstsers.size(); i++) {
-                monstersFromFile.add((JSONObject) monstsers.get(i));
-            }
-
-            // get the Monster for the level the game is at
-            JSONObject entry = (JSONObject) monstersFromFile.get(currentLevel);
-
-            // get values of the Monster's name, level, health, and image file path
-            String monsterName = (String) entry.get("name");
-            int monsterLevel = (int) entry.get("level");
-            int monsterHealth = (int) entry.get("health");
-            String monsterImagePath = (String) entry.get("image path");
-
-            // create a Course with the name and grade
-            monster = new Monster(monsterName, monsterLevel, monsterHealth, monsterImagePath);
-
-        } catch (FileNotFoundException | ParseException ex) {
-            Logger.getLogger(Monster.class.getName()).log(Level.SEVERE, null, ex);
+        } else {
+            System.out.println("Cannot find the file");
         }
         
         return monster;
