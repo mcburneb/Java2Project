@@ -2,10 +2,15 @@ package game;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 /**
  *
@@ -18,15 +23,34 @@ public class AlertBox {
         alert.setContentText(message);
         alert.show();
     }
+    
+    /**
+     * @author Brianna McBurney
+     */
+    public static void nextLevelAlert(){
+        Alert levelAlert = new Alert(AlertType.INFORMATION,  "You may now proceed to the next level", ButtonType.NEXT);
+        levelAlert.setTitle("DEAD MONSTER");
+        levelAlert.setHeaderText("You killed the monster!");
+        Optional<ButtonType> result = levelAlert.showAndWait();
+        
+        if (result.isPresent() && result.get() == ButtonType.NEXT) {
+//            Game game = new Game();
+//            game.changeLevel();
+        }
+    }
 
     /**
      * @author Brianna McBurney
      * 
-     * @return the StringBuilder that holds the instructions
      */
-    public StringBuilder readInstructions() {
-        // get the file holding the Instructions
-        File selectedFile = new File("file:resources\\files\\instructions.txt");
+    public static void readInstructions(Stage primaryStage) {
+        FileChooser chooser = new FileChooser();
+        
+        File file = new File("C:\\Users\\banan\\Documents\\NetBeansProjects\\Java 2 Project\\MonsterCombat\\resources\\files");
+        
+        chooser.setInitialDirectory(file);
+        
+        File selectedFile = chooser.showOpenDialog(primaryStage);
         
         StringBuilder builder = new StringBuilder();
         
@@ -44,7 +68,10 @@ public class AlertBox {
             }
         }      
          
-        // return the contents of the instructions folder
-        return builder;
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Instructions");
+        alert.setHeaderText("Monster Combat Instructions");
+        alert.setContentText(builder.toString());
+        alert.showAndWait();
     }    
 }

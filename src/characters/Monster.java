@@ -1,29 +1,17 @@
 package characters;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.scene.image.Image;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 /**
  * 
  * @author Brianna McBurney
  */
-public class Monster extends Character {
+public class Monster extends Character implements Attack {
 
     private int level;
     private int health;
-    private String imagePath;
     
     private ArrayList<Monster> monsterArray;
-    private ArrayList<Image> monsterImageArray;
 
     /**
      * Creates a Monster for the Player to fight.
@@ -33,10 +21,9 @@ public class Monster extends Character {
      * @param imagePath
      */
     public Monster(String name, int level, int health, String imagePath) {
-        super(name);
+        super(name, imagePath);
         this.level = level;
         this.health = health;
-        this.imagePath = imagePath;
     }
     
     public Monster() {
@@ -55,87 +42,69 @@ public class Monster extends Character {
         this.health = health;
     }
 
-    public String getImagePath() {
-        return imagePath;
-    }
-
+    /**
+     * 
+     * @param player
+     * @param monster
+     * @return The monster
+     */
     @Override
-    public int damage(Player player, Monster monster) {
+    public String damage(Player player, Monster monster) {
         int playerAttack = player.getAttackStrength();
         int monsterHealth = monster.getHealth();
 
         int newHealth = monsterHealth - playerAttack;
-
-        monster.setHealth(newHealth);
         
-        String stringHealth = String.valueOf(newHealth);
+        monster.setHealth(newHealth);
 
-        return newHealth;
+        String newHealthString = String.valueOf(newHealth);
+        
+        return newHealthString;
     }
     
-    /**
-     * Get the appropriate monster for the current level of the game
-     * 
-     * @param currentLevel The level that the game is at
-     * @return The monster that corresponds with the level the game is at
-     *
+        /**
      * Icons made by Smashicons (https://smashicons.com/)
      * From https://www.flaticon.com/
      * Licensed by Creative Commons 3.0 BY (http://creativecommons.org/licenses/by/3.0/)
      */
-    public Monster getMonsters(int currentLevel) {        
-        File selectedFile = new File("C:\\Users\\banan\\Documents\\NetBeansProjects\\Java 2 Project\\MonsterCombat\\resources\\files\\monsterArray.json");
-//        File selectedFile = new File("file:resources\\files\\monsterArray.json");
+    public void createMonsters() {
+        monsterArray = new ArrayList<>();
+                
+        for (int i=1; i <= 30; i++) {
+            int monsterHealth = i*10;
+            String path = "file:resources\\pictures\\monsters\\png\\monster-" + i + ".png";
+
+            Monster monster = new Monster("Monster "+i, i, monsterHealth, path);
+
+            monsterArray.add(monster);
+        }
+    }
+    
+        /**
+     * Get the appropriate monster for the current level of the game
+     * 
+     * @param currentLevel The level that the game is at
+     * @return The monster that corresponds with the next level
+     */
+    public Monster getMonsters(int currentLevel) {  
         
-        // initialize a Monster object to hold the monster for the current level
-        Monster monster = null;
+        // the index of the monster for the next level
+        int index = currentLevel-1;
         
-        // Create the ArrayList to hold the Monsters read from the file
-        ArrayList<JSONObject> monstersFromFile = new ArrayList<>();
-
-        if (selectedFile.exists()) {
-            try {
-                // Create a scanner to open on the file the user selected
-                Scanner input = new Scanner(selectedFile);
-
-                // Create a StringBuilder to add the contents of the file to
-                StringBuilder builder = new StringBuilder();
-
-                // loop through and read each line of the file
-                while (input.hasNextLine()) {
-                    builder.append(input.nextLine());
-                }
-
-                JSONParser parser = new JSONParser();
-                JSONObject root = (JSONObject) parser.parse(builder.toString());
-
-                // Create JSONArray to hold the Courses from the file
-                JSONArray monstsers = (JSONArray) root.get("monsters");
-
-                // Add each of the Courses to the ArrayList 
-                for (int i = 0; i < monstsers.size(); i++) {
-                    monstersFromFile.add((JSONObject) monstsers.get(i));
-                }
-
-                // get the Monster for the level the game is at
-                JSONObject entry = (JSONObject) monstersFromFile.get(currentLevel);
-
-                // get values of the Monster's name, level, health, and image file path
-                String monsterName = (String) entry.get("name");
-                Long monsterLevel = (Long) entry.get("level");
-                Long monsterHealth = (Long) entry.get("health");
-                String monsterImagePath = (String) entry.get("image path");
-
-                // create a Course with the name and grade
-                monster = new Monster(monsterName, monsterLevel.intValue(), monsterHealth.intValue(), monsterImagePath);
-
-            } catch (FileNotFoundException | ParseException ex) {
-                Logger.getLogger(Monster.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            System.out.println("Cannot find the file");
+        // level 1 = monster at 0
+        // level 2 = monster at 1
+        // level 3 = monster at 2
+        Monster nextMonster = null;
+        try {
+            
+            nextMonster = monsterArray.get(index);
+            
+        } catch (NullPointerException ex) {
+            
+            System.out.println(ex.getMessage());
+            
         }
         
-        return monster;
+        return nextMonster;
     }
 }

@@ -42,15 +42,17 @@ public class Game extends Application {
     private TextField playerName;
 
     private Button join;
+    private Button instructions;
 
     private Scene game;
 
     private int levelCount;
     
     private Label levelLbl;
-    private Label playerNameLbl;
     private Label gameName;
+    private Label playerNameLbl;
     private Label playerOfChoiceLbl;
+    private Label playerAttackStrengthLbl;
     private Label timeLabel;
     private Label monsterHealthLbl;
     
@@ -90,8 +92,6 @@ public class Game extends Application {
         playerName = new TextField();
         playerName.setStyle("-fx-border-color: blue;" + "-fx-background-color: lightblue");
         playerName.setPromptText("Enter your name");
-
-        modeNjoin = new HBox(20);
 
         playerOfChoiceLbl = new Label("Choose a player");
         
@@ -135,7 +135,13 @@ public class Game extends Application {
         join.setOnAction(e -> onJoinClick(startUpStage));
         join.setPrefWidth(160);
 
+        // create button to allow user to view the instructions
+        instructions = new Button("Instructions");
+        instructions.setOnAction(e -> AlertBox.readInstructions(startUpStage));
+        
+        modeNjoin = new HBox(20);
         modeNjoin.getChildren().add(join);
+        modeNjoin.getChildren().add(instructions);
 
         startPageLayout.getChildren().addAll(gameName, playerName, playerOfChoiceLbl, playerImages, modeNjoin);
 
@@ -151,21 +157,42 @@ public class Game extends Application {
         gameLayoutLeft = new VBox();
         gameLayoutLeft.setPadding(new Insets(10));
 
+        // label to show the current level of the game
         levelLbl = new Label("Level 1");
+        
+        // set level to 1
+        levelCount = 1;
+        
+        // label to display the name the user entered before the game started
         playerNameLbl = new Label();
+        
+        // label to display the strength of the players attack
+        playerAttackStrengthLbl = new Label();
 
-        playerInfo = new ListView<>();
-        playerInfo.getItems().add(levelLbl);
-        playerInfo.getItems().add(playerNameLbl);
-
+        // create the label to show the user how much time they have
         timeLabel = new Label("ramaining time: 20");
         
+        // create image for the player the user chooses
         playerImage = new ImageView("file:resources\\pictures\\player\\player1.png");
         playerImage.setFitHeight(100);
         playerImage.setFitWidth(100);
         
-        monsterHealthLbl = new Label("Monster Health");
-
+        Monster m = new Monster();
+        
+        // create the monsters
+        m.createMonsters();
+        
+        // get the next monster
+        currentMonster = m.getMonsters(levelCount);
+        
+        // show how much health the first monster has
+        monsterHealthLbl = new Label("Monster Health: " + currentMonster.getHealth());
+        
+        // create a ListView and add the info to it
+        playerInfo = new ListView<>();
+        playerInfo.getItems().add(levelLbl);
+        playerInfo.getItems().add(playerNameLbl);
+        playerInfo.getItems().add(playerAttackStrengthLbl);
         playerInfo.getItems().add(timeLabel);
         playerInfo.getItems().add(monsterHealthLbl);
 
@@ -174,21 +201,25 @@ public class Game extends Application {
 
         gameLayoutRight = new VBox();
         gameLayoutRight.setPadding(new Insets(10));
-
         
-        Monster m = new Monster();
-//        currentMonster = m.getMonsters(levelCount);
-        
-        monsterImage = new ImageView("file:resources\\pictures\\player\\player1.png");
-
-        monsterImage.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            int newMonsterHealth = m.damage(playerOfChoice, m);
-            String stringMonsterHealth = String.valueOf(newMonsterHealth);
-            System.out.println(stringMonsterHealth);
-            monsterHealthLbl.setText(stringMonsterHealth);
-        });
+        // create the monster image
+        monsterImage = new ImageView(currentMonster.getImagePath());
         monsterImage.setFitHeight(100);
         monsterImage.setFitWidth(100);
+        
+        // event handling for when the user 'attacks' the monster
+        monsterImage.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            String stringMonsterHealth = m.damage(playerOfChoice, currentMonster);
+            int newMonsterHealth = Integer.parseInt(stringMonsterHealth);
+            
+            if (newMonsterHealth > 0) {
+                currentMonster.setHealth(newMonsterHealth);
+                monsterHealthLbl.setText("Monster Health: " + stringMonsterHealth);
+            } else {
+                // the monster is dead so show an alert
+                AlertBox.nextLevelAlert();
+            }
+        });
 
         HBox gameLayoutOriginal = new HBox();
         gameLayoutOriginal.setPadding(new Insets(10));
@@ -218,7 +249,8 @@ public class Game extends Application {
             playerOfChoice.setName(playerNameValue);
             
             // show the players name in the label that is added to the ListView
-            playerNameLbl.setText(playerNameValue);
+            playerNameLbl.setText("Name: " + playerNameValue);
+            playerAttackStrengthLbl.setText("Attack Strength: " + playerOfChoice.getAttackStrength());
             
             startUpStage.setScene(game);
             
@@ -320,18 +352,19 @@ public class Game extends Application {
         playerOfChoice = chosenPlayer;
         playerOfChoiceLbl.setText(chosenPlayer.getName());
             
-//        Image image = new Image(playerOfChoice.getImagePath());
+        Image image = new Image(playerOfChoice.getImagePath());
         
-//        playerImage.setImage(image);
+        playerImage.setImage(image);
     }
     
     /**
      * @author Brianna McBurney
      */
-    private void changeLevels() {
+    public void changeLevel() {
         Monster m = new Monster();
         
-        levelCount = levelCount+1;
+        // go to the next level
+        levelCount += 1;
         
         // get the monsterImage for the next nevel
         currentMonster = m.getMonsters(levelCount);
@@ -345,5 +378,9 @@ public class Game extends Application {
         // increase the players attackStrength
         Player p = new Player();
         p.levelUp(playerOfChoice);
+        
+        // add 100 points to the players score
+        // TO DO: get how much time is remaining and add it to the score too
+        playerOfChoice.setScore(playerOfChoice.getScore()+100);
     }
 }

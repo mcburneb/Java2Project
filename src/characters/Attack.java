@@ -12,5 +12,5 @@ public interface Attack {
      * @param monster
      * @return The new health of the monster
      */
-    public int damage(Player player, Monster monster);
+    public String damage(Player player, Monster monster);
 }

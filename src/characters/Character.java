@@ -3,16 +3,14 @@ package characters;
  * 
  * @author Brianna McBurney
  */
-public abstract class Character implements Attack{
+public abstract class Character{
 
     private String name;
+    private String imagePath;
 
-    /**
-     * 
-     * @param name The name of the Characters
-     */
-    public Character(String name) {
+    public Character(String name, String imagePath) {
         this.name = name;
+        this.imagePath = imagePath;
     }
     
     public Character() {
@@ -25,5 +23,9 @@ public abstract class Character implements Attack{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 }
