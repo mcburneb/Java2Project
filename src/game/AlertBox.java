@@ -34,13 +34,14 @@ public class AlertBox {
         Optional<ButtonType> result = levelAlert.showAndWait();
         
         if (result.isPresent() && result.get() == ButtonType.NEXT) {
-//            Game game = new Game();
-//            game.changeLevel();
+            Game game = new Game();
+            game.changeLevel();
         }
     }
 
     /**
      * @author Brianna McBurney
+     * @param primaryStage
      * 
      */
     public static void readInstructions(Stage primaryStage) {

@@ -11,6 +11,8 @@ import java.util.Comparator;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -99,9 +101,16 @@ public class Score {
      * 
      * @param name The name the user provided at the start of the game
      * @param score The total score the user has accumulated
+     * @param primaryStage
      */
-    public void addNewScore(String name, String score){
-        File selectedFile = new File("file:resources\\files\\highScores.json");
+    public void addNewScore(String name, String score, Stage primaryStage){
+        FileChooser chooser = new FileChooser();
+        
+        File file = new File("C:\\Users\\banan\\Documents\\NetBeansProjects\\Java 2 Project\\MonsterCombat\\resources\\files");
+        
+        chooser.setInitialDirectory(file);
+        
+        File selectedFile = chooser.showOpenDialog(primaryStage);
         
         JSONArray updatedScoreList = new JSONArray();
         if (selectedFile == null) return;
