@@ -2,8 +2,6 @@ package view;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -30,17 +28,14 @@ public class AlertBox {
     
     /**
      * @author Brianna McBurney
+     * @return 
      */
-    public static void nextLevelAlert(){
+    public static boolean nextLevelAlert(){
         Alert levelAlert = new Alert(AlertType.INFORMATION,  "You may now proceed to the next level", ButtonType.NEXT);
         levelAlert.setTitle("DEAD MONSTER");
         levelAlert.setHeaderText("You killed the monster!");
-        Optional<ButtonType> result = levelAlert.showAndWait();
-        
-        if (result.isPresent() && result.get() == ButtonType.NEXT) {
-            Game game = new Game();
-            game.changeLevel();
-        }
+        levelAlert.showAndWait();
+        return true;
     }
 
     /**
@@ -49,15 +44,8 @@ public class AlertBox {
      * 
      */
     public static void readInstructions(Stage primaryStage) {
-        URI uri = null;
-        try {
-            uri = new URI("file:resources/files/instructions.txt");
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(AlertBox.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        File selectedFile = new File(uri);
-//        File selectedFile = new File("C:\\Users\\banan\\Documents\\NetBeansProjects\\Java 2 Project\\MonsterCombat\\resources\\files\\instructions.txt");
+        
+        File selectedFile = new File("src/fileResources/files/instructions.txt");
         
         StringBuilder builder = new StringBuilder();
         

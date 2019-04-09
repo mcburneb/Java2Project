@@ -45,7 +45,7 @@ public class Score {
      * TO DO: display the scores in a GUI
      */
     public void getHighScores() {
-        File selectedFile = new File("file:resources//files//highScores.json");
+        File selectedFile = new File("src/fileResources/files/highScores.json");
         
         ArrayList<JSONObject> scoreList = new ArrayList<>();
         try {
