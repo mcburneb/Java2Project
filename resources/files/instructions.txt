@@ -1,20 +1,20 @@
-Monster Combat
+To start the game you must enter a username and select your character. Once you have done that click 'join'.
 
-Start Game:
-- enter your username
-- pick your character
-- click join
+Once the game has started on your left you will see a panel that displays the current level you are one, the username you entered, the strength of your attack (how much dammage you are doing), how much time you have left to kill the monster, and how much health the mosnter has.On the right you will see a monster moving around the screen. 
 
-Level:
-- click the monster to attack it
-- you must get the monsters health down to 0 before the time runs out
-- if you do it you will have the option to increase the amount of damage you do or go to the next level
-- as you go through the levels the monsters health will increase but the time you have to do it in will stay the same
+Playing the Game:
+Your goal is to kill the monster before the time runs out.
 
-End Game:
-- if you run out of time the game will end
-- you can then add your score to the high scores list
+You have to attack the monster by clicking it. Each time you click, its health will be depleated by the value of your attack strength.
+
+If the time runs out before the monster dies, the game is over.
+If the monster dies before time runs out, you will proceed to the next level.
+
+After each level is complete your characters attack strength will increase and a new monster will appear for you to kill. Each new monster will have more health than the last but you will have the same amount of time for each level.
+
+If you kill the monster, you will proceed to the next level and your attack strength will be leveled up.
+
+The next level will have a different monster but it will have more health than the last. You will have the same amount of time as the last level to kill the monster.
 
 Score:
-- you will get # points for each level
-- bonus points are awarded based on how much time 
+After you complete each level you will receive 100 points + bonus points based on how much time is left when the monster dies.

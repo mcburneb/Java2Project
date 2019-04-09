@@ -9,6 +9,9 @@ import java.util.logging.Logger;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -70,9 +73,20 @@ public class AlertBox {
         }      
          
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.getDialogPane().setMinWidth(Region.USE_PREF_SIZE);
         alert.setTitle("Instructions");
         alert.setHeaderText("Monster Combat Instructions");
-        alert.setContentText(builder.toString());
+        alert.setContentText("Click 'show details' to view instructions");
+        
+//        https://code.makery.ch/blog/javafx-dialogs-official/
+        TextArea textArea = new TextArea(builder.toString());
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+        
+        StackPane pane = new StackPane();
+        pane.getChildren().add(textArea);
+        
+        alert.getDialogPane().setExpandableContent(pane);
         alert.showAndWait();
     }    
 }

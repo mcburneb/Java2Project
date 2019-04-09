@@ -215,8 +215,11 @@ public class Game extends Application {
                 currentMonster.setHealth(newMonsterHealth);
                 monsterHealthLbl.setText("Monster Health: " + stringMonsterHealth);
             } else {
-                // the monster is dead so show an alert
-                AlertBox.nextLevelAlert();
+                // TO DO: stop the counter
+                
+                // move the game to the next level
+//                AlertBox.nextLevelAlert();
+                changeLevel();
             }
         });
 
@@ -334,6 +337,8 @@ public class Game extends Application {
                     alert.setHeaderText("time is up");
                     alert.show();
                     timeline.stop();
+                    
+                    // TO DO: show end of game GUI, allows user to add their score to the list & see the list of top 10
 
                 }
             }

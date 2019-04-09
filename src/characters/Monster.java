@@ -11,7 +11,7 @@ public class Monster extends Character implements Attack {
     private int level;
     private int health;
     
-    private ArrayList<Monster> monsterArray;
+    private static ArrayList<Monster> monsterArray;
 
     /**
      * Creates a Monster for the Player to fight.
