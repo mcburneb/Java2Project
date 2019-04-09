@@ -1,0 +1,20 @@
+Monster Combat
+
+Start Game:
+- enter your username
+- pick your character
+- click join
+
+Level:
+- click the monster to attack it
+- you must get the monsters health down to 0 before the time runs out
+- if you do it you will have the option to increase the amount of damage you do or go to the next level
+- as you go through the levels the monsters health will increase but the time you have to do it in will stay the same
+
+End Game:
+- if you run out of time the game will end
+- you can then add your score to the high scores list
+
+Score:
+- you will get # points for each level
+- bonus points are awarded based on how much time 
