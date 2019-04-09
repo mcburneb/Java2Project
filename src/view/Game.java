@@ -70,6 +70,9 @@ public class Game extends Application {
 
     private ImageView playerImage;
     private ImageView monsterImage;
+    private ImageView p1Image;
+    private ImageView p2Image;
+    private ImageView p3Image;
 
     private ListView<Label> playerInfo;
 
@@ -97,37 +100,7 @@ public class Game extends Application {
 
         playerOfChoiceLbl = new Label("Choose a player");
 
-        // create the player options to display 
-        ArrayList<Player> playerList = null;
-        Player p = new Player();
-        playerList = p.getPlayers();
-
-        ImageView p1Image = new ImageView(playerList.get(0).getImagePath());
-        p1Image.setFitHeight(400);
-        p1Image.setFitWidth(400);
-        Player p1 = playerList.get(0);
-        p1Image.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
-            // set the selected player as the player of choice
-            setPlayerOfChoise(p1);
-        });
-
-        ImageView p2Image = new ImageView(playerList.get(1).getImagePath());
-        p2Image.setFitHeight(400);
-        p2Image.setFitWidth(400);
-        Player p2 = playerList.get(1);
-        p2Image.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
-            // set the selected player as the player of choice
-            setPlayerOfChoise(p2);
-        });
-
-        ImageView p3Image = new ImageView(playerList.get(2).getImagePath());
-        p3Image.setFitHeight(400);
-        p3Image.setFitWidth(400);
-        Player p3 = playerList.get(2);
-        p3Image.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
-            // set the selected player as the player of choice
-            setPlayerOfChoise(p3);
-        });
+        createPlayerChoice();
 
         // grade HBox to hold player options and add the players Images to it
         HBox playerImages = new HBox();
@@ -307,8 +280,7 @@ public class Game extends Application {
         // restart timeline with new values
         timeline.stop();
         timeline.getKeyFrames().clear();
-        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(2000),
-                (e) -> keyFrameAction()));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.millis(2000), (e) -> keyFrameAction()));
         timeline.play();
     }
 
@@ -329,6 +301,40 @@ public class Game extends Application {
     private void resume() {
         timeline.play();
         time.play();
+    }
+
+    private void createPlayerChoice() {
+        // create the player options to display 
+        ArrayList<Player> playerList = null;
+        Player p = new Player();
+        playerList = p.getPlayers();
+
+        p1Image = new ImageView(playerList.get(0).getImagePath());
+        p1Image.setFitHeight(400);
+        p1Image.setFitWidth(400);
+        Player p1 = playerList.get(0);
+        p1Image.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+            // set the selected player as the player of choice
+            setPlayerOfChoise(p1);
+        });
+
+        p2Image = new ImageView(playerList.get(1).getImagePath());
+        p2Image.setFitHeight(400);
+        p2Image.setFitWidth(400);
+        Player p2 = playerList.get(1);
+        p2Image.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+            // set the selected player as the player of choice
+            setPlayerOfChoise(p2);
+        });
+
+        p3Image = new ImageView(playerList.get(2).getImagePath());
+        p3Image.setFitHeight(400);
+        p3Image.setFitWidth(400);
+        Player p3 = playerList.get(2);
+        p3Image.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+            // set the selected player as the player of choice
+            setPlayerOfChoise(p3);
+        });
     }
 
     private class Pos {
