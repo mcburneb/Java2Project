@@ -349,6 +349,7 @@ public class Game extends Application {
      * @author Mostafa
      */
     private class Pos {
+
         int x;
         int y;
     }
@@ -463,9 +464,9 @@ public class Game extends Application {
         Text content = new Text("You are out of time.");
         content.setFont(Font.font("Verdava", 50));
         content.setFill(Color.ROSYBROWN);
-        
+
         ListView topTenScore = new ListView();
-        
+
         Button playAgain = new Button("Play again");
         playAgain.setOnAction(e -> playAgainAction());
 
@@ -476,10 +477,16 @@ public class Game extends Application {
         gameOverWindow.setScene(scene);
         gameOverWindow.show();
     }
-        private void playAgainAction() {
-            gameOverWindow.close();
-            transition.stop();
-            startUpStage.setScene(startUpScene);
-            
-        }
+
+    /**
+     * @author Mostafa
+     */
+    private void playAgainAction() {
+        gameOverWindow.close();
+        transition.stop();
+        gameOverWindow.close();
+        startUpStage.close();
+        //startUpStage.show();
+
+    }
 }
