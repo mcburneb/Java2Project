@@ -37,20 +37,22 @@ public class Game extends Application {
 
     private TextField playerName;
 
-    private Button join;
-    private Button instructions;
+    private Button joinBtn;
+    private Button instructionBtn;
     private Button pauseBtn;
     private Button resumeBtn;
 
     private TranslateTransition transition;
     private Timeline time;
 
+    private Scene startUpScene;
     private Scene game;
+    private Scene gameOverScene;
 
     private static int levelCount;
 
     private Label levelLbl;
-    private Label gameName;
+    private Label gameNameLbl;
     private Label playerNameLbl;
     private Label playerOfChoiceLbl;
     private Label playerAttackStrengthLbl;
@@ -66,8 +68,6 @@ public class Game extends Application {
     private VBox gameLayoutLeft;
     private VBox gameLayoutRight;
 
-    private Scene scene;
-
     private ImageView playerImage;
     private ImageView monsterImage;
 
@@ -78,6 +78,8 @@ public class Game extends Application {
 
     private Timeline timeline;
     private final Random random = new Random();
+    
+    private Stage startUpStage;
 
     @Override
     public void start(Stage startUpStage) {
@@ -87,9 +89,9 @@ public class Game extends Application {
         startPageLayout.setStyle("-fx-background-color: black");
         startPageLayout.setPadding(new Insets(20));
 
-        gameName = new Label("MONSTER COMBAT");
-        gameName.setFont(Font.loadFont("file:resources/font/DragonForcE.ttf", 150));
-        gameName.setTextFill(Color.web("#0076a9"));
+        gameNameLbl = new Label("MONSTER COMBAT");
+        gameNameLbl.setFont(Font.loadFont("file:resources/font/DragonForcE.ttf", 150));
+        gameNameLbl.setTextFill(Color.web("#0076a9"));
 
         playerName = new TextField();
         playerName.setStyle("-fx-border-color: blue;" + "-fx-background-color: lightblue");
@@ -133,22 +135,22 @@ public class Game extends Application {
         HBox playerImages = new HBox();
         playerImages.getChildren().addAll(p1Image, p2Image, p3Image);
 
-        join = new Button("Join");
-        join.setOnAction(e -> onJoinClick(startUpStage));
-        join.setPrefWidth(160);
+        joinBtn = new Button("Join");
+        joinBtn.setOnAction(e -> onJoinClick(startUpStage));
+        joinBtn.setPrefWidth(160);
 
         // create button to allow user to view the instructions
-        instructions = new Button("Instructions");
-        instructions.setOnAction(e -> AlertBox.readInstructions(startUpStage));
+        instructionBtn = new Button("Instructions");
+        instructionBtn.setOnAction(e -> AlertBox.readInstructions(startUpStage));
 
         modeNjoin = new HBox(20);
-        modeNjoin.getChildren().add(join);
-        modeNjoin.getChildren().add(instructions);
+        modeNjoin.getChildren().add(joinBtn);
+        modeNjoin.getChildren().add(instructionBtn);
 
-        startPageLayout.getChildren().addAll(gameName, playerName, playerOfChoiceLbl, playerImages, modeNjoin);
+        startPageLayout.getChildren().addAll(gameNameLbl, playerName, playerOfChoiceLbl, playerImages, modeNjoin);
 
-        scene = new Scene(startPageLayout, 1450, 950);
-        startUpStage.setScene(scene);
+        startUpScene = new Scene(startPageLayout, 1450, 950);
+        startUpStage.setScene(startUpScene);
 
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds(); //to make the stage center
         startUpStage.setX((primScreenBounds.getWidth() - startUpStage.getWidth()) / 2); //to make the stage center
@@ -189,8 +191,8 @@ public class Game extends Application {
 
         // show how much health the first monster has
         monsterHealthLbl = new Label("Monster Health: " + currentMonster.getHealth());
-        
-        scoreLbl = new Label("Score: 0tgyhujk");
+
+        scoreLbl = new Label("Score: 0");
 
         // create a ListView and add the info to it
         playerInfo = new ListView<>();
@@ -227,11 +229,8 @@ public class Game extends Application {
                 monsterHealthLbl.setText("Monster Health: " + stringMonsterHealth);
             } else {
                 // TO DO: stop the counter
-
-                // move the game to the next level
                 boolean changeLvl = AlertBox.nextLevelAlert();
                 if (changeLvl) {
-                    //startTime = 20;
                     changeLevel();
                 }
             }
@@ -243,6 +242,10 @@ public class Game extends Application {
         gameLayoutOriginal.getChildren().addAll(gameLayoutLeft, gameLayoutRight);
 
         game = new Scene(gameLayoutOriginal, 1450, 950);
+        
+        Button btn = new Button("somwthing");
+        HBox something = new HBox(btn);
+        gameOverScene = new Scene(something);
 
     }
 
@@ -322,11 +325,13 @@ public class Game extends Application {
     }
 
     private void pause() {
+        transition.pause();
         timeline.stop();
         time.stop();
     }
 
     private void resume() {
+        transition.play();
         timeline.play();
         time.play();
     }
@@ -350,13 +355,7 @@ public class Game extends Application {
                 seconds--;
                 timeLabel.setText("remaining time: " + seconds.toString());
                 if (seconds <= 0) {
-                    time.stop();
-
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText("time is up");
-                    alert.show();
-                    timeline.stop();
-
+                    gameOverSetScene();
                     // TO DO: show end of game GUI, allows user to add their score to the list & see the list of top 10
                 }
             }
@@ -413,5 +412,15 @@ public class Game extends Application {
 
         // update the score on the ListView
         scoreLbl.setText("Score: " + String.valueOf(playerOfChoice.getScore()));
+
+        seconds = 20;
+    }
+
+    public void gameOverSetScene() {
+        System.out.println("here gameover");
+        time.stop();
+        timeline.stop();
+        AlertBox.informAlert("game over", "time is up");
+        startUpStage.setScene(gameOverScene);
     }
 }

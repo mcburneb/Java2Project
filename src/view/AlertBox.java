@@ -89,5 +89,17 @@ public class AlertBox {
         
         alert.getDialogPane().setExpandableContent(pane);
         alert.showAndWait();
-    }    
+    }  
+    
+        public static boolean gameOverAlert(){
+        Alert gameOverAlert = new Alert(AlertType.INFORMATION);
+        gameOverAlert.setTitle("Game Over");
+        gameOverAlert.setHeaderText("You are out of time!");
+//        Optional<ButtonType> result = levelAlert.showAndWait();
+//       
+//        if (result.isPresent() && result.get() == ButtonType.NEXT) {
+//            return true;
+//        }
+        return true;
+    }
 }
