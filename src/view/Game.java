@@ -27,6 +27,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.util.Duration;
 
 /**
@@ -47,7 +49,6 @@ public class Game extends Application {
 
     private Scene startUpScene;
     private Scene game;
-    private Scene gameOverScene;
 
     private static int levelCount;
 
@@ -62,9 +63,10 @@ public class Game extends Application {
 
     private Player playerOfChoice;
     private Monster currentMonster;
+    private Monster m;
 
     private VBox startPageLayout;
-    private HBox modeNjoin;
+    private HBox joinBtnLayout;
     private VBox gameLayoutLeft;
     private VBox gameLayoutRight;
 
@@ -78,34 +80,35 @@ public class Game extends Application {
 
     private Timeline timeline;
     private final Random random = new Random();
-    
+
     private Stage startUpStage;
+    private Stage gameOverWindow;
 
     @Override
     public void start(Stage startUpStage) {
         startUpStage.setTitle("Start Up");
 
-        startPageLayout = new VBox(17);
+        startPageLayout = new VBox(15);
         startPageLayout.setStyle("-fx-background-color: black");
         startPageLayout.setPadding(new Insets(20));
 
-        gameNameLbl = new Label("MONSTER COMBAT");
+        gameNameLbl = new Label(" MONSTER  COMBAT");
         gameNameLbl.setFont(Font.loadFont("file:resources/font/DragonForcE.ttf", 150));
         gameNameLbl.setTextFill(Color.web("#0076a9"));
-
         playerName = new TextField();
-        playerName.setStyle("-fx-border-color: blue;" + "-fx-background-color: lightblue");
+        playerName.setStyle("-fx-border-color: white;" + "-fx-background-color: lightBlue");
         playerName.setPromptText("Enter your name");
 
         playerOfChoiceLbl = new Label("Choose a player");
+        playerOfChoiceLbl.setTextFill(Color.web("#0076a9"));
 
         // create the player options to display 
-        ArrayList<Player> playerList = null;
+        ArrayList<Player> playerList;
         Player p = new Player();
         playerList = p.getPlayers();
 
         ImageView p1Image = new ImageView(playerList.get(0).getImagePath());
-        p1Image.setFitHeight(400);
+        p1Image.setFitHeight(450);
         p1Image.setFitWidth(400);
         Player p1 = playerList.get(0);
         p1Image.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
@@ -114,7 +117,7 @@ public class Game extends Application {
         });
 
         ImageView p2Image = new ImageView(playerList.get(1).getImagePath());
-        p2Image.setFitHeight(400);
+        p2Image.setFitHeight(450);
         p2Image.setFitWidth(400);
         Player p2 = playerList.get(1);
         p2Image.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
@@ -123,7 +126,7 @@ public class Game extends Application {
         });
 
         ImageView p3Image = new ImageView(playerList.get(2).getImagePath());
-        p3Image.setFitHeight(400);
+        p3Image.setFitHeight(450);
         p3Image.setFitWidth(400);
         Player p3 = playerList.get(2);
         p3Image.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
@@ -137,19 +140,18 @@ public class Game extends Application {
 
         joinBtn = new Button("Join");
         joinBtn.setOnAction(e -> onJoinClick(startUpStage));
-        joinBtn.setPrefWidth(160);
+        joinBtn.setPrefWidth(400);
 
         // create button to allow user to view the instructions
         instructionBtn = new Button("Instructions");
         instructionBtn.setOnAction(e -> AlertBox.readInstructions(startUpStage));
 
-        modeNjoin = new HBox(20);
-        modeNjoin.getChildren().add(joinBtn);
-        modeNjoin.getChildren().add(instructionBtn);
+        joinBtnLayout = new HBox(290);
+        joinBtnLayout.getChildren().addAll(instructionBtn, joinBtn);
 
-        startPageLayout.getChildren().addAll(gameNameLbl, playerName, playerOfChoiceLbl, playerImages, modeNjoin);
+        startPageLayout.getChildren().addAll(gameNameLbl, playerName, playerOfChoiceLbl, playerImages, joinBtnLayout);
 
-        startUpScene = new Scene(startPageLayout, 1450, 950);
+        startUpScene = new Scene(startPageLayout, 1250, 850);
         startUpStage.setScene(startUpScene);
 
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds(); //to make the stage center
@@ -174,14 +176,14 @@ public class Game extends Application {
         playerAttackStrengthLbl = new Label();
 
         // create the label to show the user how much time they have
-        timeLabel = new Label("ramaining time: 20");
+        timeLabel = new Label("Ramaining time: 20");
 
         // create image for the player the user chooses
         playerImage = new ImageView("file:resources\\pictures\\player\\player1.png");
         playerImage.setFitHeight(500);
         playerImage.setFitWidth(400);
 
-        Monster m = new Monster();
+        m = new Monster();
 
         // create the monsters
         m.createMonsters();
@@ -204,12 +206,18 @@ public class Game extends Application {
         playerInfo.getItems().add(scoreLbl);
 
         pauseBtn = new Button("Pause");
+        pauseBtn.setPrefWidth(100);
         pauseBtn.setOnAction(e -> pause());
         resumeBtn = new Button("resume");
+        resumeBtn.setPrefWidth(100);
         resumeBtn.setOnAction(e -> resume());
 
+        HBox pauseNresumeLayout = new HBox(20);
+        pauseNresumeLayout.setAlignment(javafx.geometry.Pos.CENTER);
+        pauseNresumeLayout.getChildren().addAll(pauseBtn, resumeBtn);
+
         //player information framework
-        gameLayoutLeft.getChildren().addAll(playerInfo, playerImage, pauseBtn, resumeBtn);
+        gameLayoutLeft.getChildren().addAll(playerInfo, playerImage, pauseNresumeLayout);
 
         gameLayoutRight = new VBox();
         gameLayoutRight.setPadding(new Insets(10));
@@ -220,21 +228,7 @@ public class Game extends Application {
         monsterImage.setFitWidth(100);
 
         // event handling for when the user 'attacks' the monster
-        monsterImage.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            String stringMonsterHealth = m.damage(playerOfChoice, currentMonster);
-            int newMonsterHealth = Integer.parseInt(stringMonsterHealth);
-
-            if (newMonsterHealth > 0) {
-                currentMonster.setHealth(newMonsterHealth);
-                monsterHealthLbl.setText("Monster Health: " + stringMonsterHealth);
-            } else {
-                // TO DO: stop the counter
-                boolean changeLvl = AlertBox.nextLevelAlert();
-                if (changeLvl) {
-                    changeLevel();
-                }
-            }
-        });
+        monsterImage.setOnMousePressed(event -> onMonsterAction());
 
         HBox gameLayoutOriginal = new HBox();
         gameLayoutOriginal.setPadding(new Insets(10));
@@ -242,10 +236,6 @@ public class Game extends Application {
         gameLayoutOriginal.getChildren().addAll(gameLayoutLeft, gameLayoutRight);
 
         game = new Scene(gameLayoutOriginal, 1450, 950);
-        
-        Button btn = new Button("somwthing");
-        HBox something = new HBox(btn);
-        gameOverScene = new Scene(something);
 
     }
 
@@ -256,6 +246,10 @@ public class Game extends Application {
         launch(args);
     }
 
+    /**
+     * @author Mostafa
+     * @param startUpStage
+     */
     public void onJoinClick(Stage startUpStage) {
         // make sure the user has entered a name for their player
         if (playerName.getText().isEmpty()) {
@@ -288,6 +282,9 @@ public class Game extends Application {
 
     }
 
+    /**
+     * @author Mostafa
+     */
     private void keyFrameAction() {
         monsterImage.setLayoutX(100);
         monsterImage.setLayoutY(100);
@@ -315,6 +312,10 @@ public class Game extends Application {
         timeline.play();
     }
 
+    /**
+     * @author Mostafa
+     * @return
+     */
     private Pos getRandomPos() {
         int x = random.nextInt(500);
         int y = random.nextInt(400);
@@ -324,24 +325,37 @@ public class Game extends Application {
         return p;
     }
 
+    /**
+     * @author Mostafa
+     */
     private void pause() {
-        transition.pause();
+        monsterImage.setOnMousePressed(null);
+        transition.stop();
         timeline.stop();
         time.stop();
     }
 
+    /**
+     * @author Mostafa
+     */
     private void resume() {
+        monsterImage.setOnMousePressed(event -> onMonsterAction());
         transition.play();
         timeline.play();
         time.play();
     }
 
+    /**
+     * @author Mostafa
+     */
     private class Pos {
-
         int x;
         int y;
     }
 
+    /**
+     * @author Mostafa
+     */
     private void doTime() {
         time = new Timeline();
         time.setCycleCount(Timeline.INDEFINITE);
@@ -353,9 +367,9 @@ public class Game extends Application {
             @Override
             public void handle(ActionEvent event) {
                 seconds--;
-                timeLabel.setText("remaining time: " + seconds.toString());
+                timeLabel.setText("Remaining time: " + seconds.toString());
                 if (seconds <= 0) {
-                    gameOverSetScene();
+                    gameOverStage();
                     // TO DO: show end of game GUI, allows user to add their score to the list & see the list of top 10
                 }
             }
@@ -384,7 +398,7 @@ public class Game extends Application {
      * @author Brianna McBurney
      */
     public void changeLevel() {
-        Monster m = new Monster();
+        m = new Monster();
 
         // go to the next level
         levelCount += 1;
@@ -394,7 +408,7 @@ public class Game extends Application {
 
         // update ImageView with new monsterImage for next level
         Image newMonster = new Image(currentMonster.getImagePath());
-        monsterImage.setImage(newMonster);;
+        monsterImage.setImage(newMonster);
 
         // udpate monsterHealthLbl with new monsters health
         monsterHealthLbl.setText("Monster Health: " + currentMonster.getHealth());
@@ -416,11 +430,56 @@ public class Game extends Application {
         seconds = 20;
     }
 
-    public void gameOverSetScene() {
-        System.out.println("here gameover");
+    /**
+     * @author Brianna McBurney
+     */
+    public void onMonsterAction() {
+        String stringMonsterHealth = m.damage(playerOfChoice, currentMonster);
+        int newMonsterHealth = Integer.parseInt(stringMonsterHealth);
+
+        if (newMonsterHealth > 0) {
+            currentMonster.setHealth(newMonsterHealth);
+            monsterHealthLbl.setText("Monster Health: " + stringMonsterHealth);
+        } else {
+            // TO DO: stop the counter
+            boolean changeLvl = AlertBox.nextLevelAlert();
+            if (changeLvl) {
+                changeLevel();
+            }
+        }
+    }
+
+    /**
+     * @author Mostafa
+     */
+    public void gameOverStage() {
         time.stop();
         timeline.stop();
-        AlertBox.informAlert("game over", "time is up");
-        startUpStage.setScene(gameOverScene);
+
+        gameOverWindow = new Stage();
+        gameOverWindow.initModality(Modality.APPLICATION_MODAL);
+        gameOverWindow.setTitle("Game is over");
+
+        Text content = new Text("You are out of time.");
+        content.setFont(Font.font("Verdava", 50));
+        content.setFill(Color.ROSYBROWN);
+        
+        ListView topTenScore = new ListView();
+        
+        Button playAgain = new Button("Play again");
+        playAgain.setOnAction(e -> playAgainAction());
+
+        VBox layout = new VBox(10);
+        layout.getChildren().addAll(gameNameLbl, content, topTenScore, playAgain);
+        layout.setAlignment(javafx.geometry.Pos.CENTER);
+        Scene scene = new Scene(layout, 1150, 850);
+        gameOverWindow.setScene(scene);
+        gameOverWindow.show();
     }
+        private void playAgainAction() {
+            gameOverWindow.close();
+            transition.stop();
+            startUpStage.setScene(startUpScene);
+            
+        }
 }

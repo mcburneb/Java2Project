@@ -8,12 +8,19 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -21,22 +28,23 @@ import javafx.stage.Stage;
  * @author Mostafa
  */
 public class AlertBox {
-    public static void informAlert(String title, String message){
+
+    public static void informAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(title);
         alert.setContentText(message);
         alert.show();
     }
-    
+
     /**
      * @author Brianna McBurney
      */
-    public static boolean nextLevelAlert(){
-        Alert levelAlert = new Alert(AlertType.INFORMATION,  "You may now proceed to the next level", ButtonType.NEXT);
+    public static boolean nextLevelAlert() {
+        Alert levelAlert = new Alert(AlertType.INFORMATION, "You may now proceed to the next level", ButtonType.NEXT);
         levelAlert.setTitle("DEAD MONSTER");
         levelAlert.setHeaderText("You killed the monster!");
         Optional<ButtonType> result = levelAlert.showAndWait();
-        
+
         if (result.isPresent() && result.get() == ButtonType.NEXT) {
             return true;
         }
@@ -46,7 +54,7 @@ public class AlertBox {
     /**
      * @author Brianna McBurney
      * @param primaryStage
-     * 
+     *
      */
     public static void readInstructions(Stage primaryStage) {
         URI uri = null;
@@ -58,9 +66,9 @@ public class AlertBox {
 
         File selectedFile = new File(uri);
 //        File selectedFile = new File("C:\\Users\\banan\\Documents\\NetBeansProjects\\Java 2 Project\\MonsterCombat\\resources\\files\\instructions.txt");
-        
+
         StringBuilder builder = new StringBuilder();
-        
+
         try {
             Scanner in = new Scanner(selectedFile);
 
@@ -71,35 +79,23 @@ public class AlertBox {
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(AlertBox.class.getName()).log(Level.SEVERE, null, ex);
-        }      
-         
+        }
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.getDialogPane().setMinWidth(Region.USE_PREF_SIZE);
         alert.setTitle("Instructions");
         alert.setHeaderText("Monster Combat Instructions");
         alert.setContentText("Click 'show details' to view instructions");
-        
+
 //        https://code.makery.ch/blog/javafx-dialogs-official/
         TextArea textArea = new TextArea(builder.toString());
         textArea.setEditable(false);
         textArea.setWrapText(true);
-        
+
         StackPane pane = new StackPane();
         pane.getChildren().add(textArea);
-        
+
         alert.getDialogPane().setExpandableContent(pane);
         alert.showAndWait();
-    }  
-    
-        public static boolean gameOverAlert(){
-        Alert gameOverAlert = new Alert(AlertType.INFORMATION);
-        gameOverAlert.setTitle("Game Over");
-        gameOverAlert.setHeaderText("You are out of time!");
-//        Optional<ButtonType> result = levelAlert.showAndWait();
-//       
-//        if (result.isPresent() && result.get() == ButtonType.NEXT) {
-//            return true;
-//        }
-        return true;
     }
 }
