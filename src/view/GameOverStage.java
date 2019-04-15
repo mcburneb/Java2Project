@@ -52,7 +52,7 @@ public class GameOverStage extends Stage {
         ObservableList scoreList = s.getHighScores();
         TableView<Score> scores = createScoreTable(scoreList);
         scores.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        scores.setMinWidth(400);
+        scores.setMaxWidth(500);
 
         VBox layout = new VBox(10);
         layout.getChildren().addAll(gameNameLbl, playerResults, message, scores);
@@ -93,19 +93,21 @@ public class GameOverStage extends Stage {
             }
         });
         rankColumn.setSortable(false);
+        rankColumn.setResizable(false);
 
         // Create the column to display the name of the player that achived that score
         TableColumn<Score, String> nameColumn = new TableColumn<>("NAME");
+        nameColumn.setResizable(false);
         // pair the cellValue with the name from the Score object (has to match the name of the data field used when you create the Score)
         nameColumn.setCellValueFactory(new PropertyValueFactory("name"));
-        nameColumn.setMinWidth(200);
         nameColumn.setSortable(false);
+        nameColumn.setMinWidth(200);
 
         // Create the column to display the score that the player achieved
         TableColumn<Score, Integer> scoreColumn = new TableColumn<>("SCORE");
+        scoreColumn.setResizable(false);
         // pair the cellValue with the score from the Score object (has to match the name of the data field used when you create the Score)
         scoreColumn.setCellValueFactory(new PropertyValueFactory("score"));
-        scoreColumn.setMinWidth(100);
         scoreColumn.setSortable(false);
 
         // add the list of scores to the TableView

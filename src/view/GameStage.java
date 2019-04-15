@@ -59,8 +59,6 @@ public class GameStage extends Stage {
     private ImageView playerImage;
     private ImageView monsterImage;
 
-//    private ListView<Label> playerInfo;
-
     private Integer startTime = 20;
     private Integer seconds = startTime;
 
@@ -82,6 +80,7 @@ public class GameStage extends Stage {
          // root layout of the game structure
         gameLayoutLeft = new VBox();
         gameLayoutLeft.setPadding(new Insets(10));
+        gameLayoutLeft.setStyle("-fx-background-color: lightBlue");
 
         // label to show the current level of the game
         levelLbl = new Label("Level 1");
@@ -102,8 +101,8 @@ public class GameStage extends Stage {
 
         // create image for the player the user chooses
         playerImage = new ImageView(playerOfChoice.getImagePath());
-        playerImage.setFitHeight(700);
-        playerImage.setFitWidth(600);
+        playerImage.setFitHeight(600);
+        playerImage.setFitWidth(500);
 
         m = new Monster();
 
