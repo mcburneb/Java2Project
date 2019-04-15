@@ -51,6 +51,8 @@ public class GameOverStage extends Stage {
         Score s = new Score();
         ObservableList scoreList = s.getHighScores();
         TableView<Score> scores = createScoreTable(scoreList);
+        scores.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        scores.setMinWidth(400);
 
         VBox layout = new VBox(10);
         layout.getChildren().addAll(gameNameLbl, playerResults, message, scores);

@@ -2,6 +2,7 @@ package view;
 
 import java.util.ArrayList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -42,24 +43,26 @@ public class MenuStage extends Stage {
      * @author Mostafa
      */
     public MenuStage() {
-        startPageLayout = new VBox(15);
+        startPageLayout = new VBox(10);
         startPageLayout.setStyle("-fx-background-color: black");
         startPageLayout.setPadding(new Insets(20));
 
         gameNameLbl = new Label(" MONSTER  COMBAT");
-        gameNameLbl.setFont(Font.loadFont("file:resources/font/DragonForcE.ttf", 150));
+        gameNameLbl.setFont(Font.loadFont("file:resources/font/DragonForcE.ttf", 250));
         gameNameLbl.setTextFill(Color.web("#0076a9"));
+        
         playerName = new TextField();
         playerName.setStyle("-fx-border-color: white;" + "-fx-background-color: lightBlue");
         playerName.setPromptText("Enter your name");
 
         playerOfChoiceLbl = new Label("Choose a player");
         playerOfChoiceLbl.setTextFill(Color.web("#0076a9"));
+        playerOfChoiceLbl.setFont(Font.font("Verdana", 40));
 
         // create the player options to display 
         playerList = new ArrayList<>();
         playerList = Player.getPlayers();
-
+        
         ImageView p1Image = new ImageView(playerList.get(0).getImagePath());
         p1Image.setFitHeight(450);
         p1Image.setFitWidth(400);
@@ -89,20 +92,27 @@ public class MenuStage extends Stage {
 
         // grade HBox to hold player options and add the players Images to it
         HBox playerImages = new HBox();
+        playerImages.setAlignment(Pos.CENTER);
         playerImages.getChildren().addAll(p1Image, p2Image, p3Image);
 
         joinBtn = new Button("Join");
+        joinBtn.setPrefHeight(200);
+        joinBtn.setPrefWidth(200);
         joinBtn.setOnAction(e -> onJoinClick());
-        joinBtn.setPrefWidth(400);
 
         // create button to allow user to view the instructions
         instructionBtn = new Button("Instructions");
+        instructionBtn.setPrefHeight(200);
+        instructionBtn.setPrefWidth(200);
         instructionBtn.setOnAction(e -> AlertBox.readInstructions(this));
 
-        joinBtnLayout = new HBox(290);
+        joinBtnLayout = new HBox(700);
         joinBtnLayout.getChildren().addAll(instructionBtn, joinBtn);
+        
+        HBox playerPrompt = new HBox(playerOfChoiceLbl);
+        playerPrompt.setAlignment(Pos.CENTER);
 
-        startPageLayout.getChildren().addAll(gameNameLbl, playerName, playerOfChoiceLbl, playerImages, joinBtnLayout);
+        startPageLayout.getChildren().addAll(gameNameLbl, playerName, playerPrompt, playerImages, joinBtnLayout);
 
         Scene startUpScene = new Scene(startPageLayout, 1250, 850);
         this.setScene(startUpScene);
@@ -121,6 +131,7 @@ public class MenuStage extends Stage {
         this.show();
     }
     
+
     /**
      * @author Brianna McBurney
      *
@@ -132,7 +143,6 @@ public class MenuStage extends Stage {
         // set the chosen player as the plater of choice
         playerOfChoice = chosenPlayer;
         playerOfChoiceLbl.setText(chosenPlayer.getName());
-        playerOfChoice.setImagePath(playerOfChoice.getImagePath());
     }
     
     /**

@@ -5,7 +5,10 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
@@ -41,7 +44,6 @@ public class GameStage extends Stage {
 
     private Label levelLbl;
     private Label playerNameLbl;
-    private Label playerOfChoiceLbl;
     private Label playerAttackStrengthLbl;
     private Label timeLabel;
     private Label monsterHealthLbl;
@@ -57,13 +59,15 @@ public class GameStage extends Stage {
     private ImageView playerImage;
     private ImageView monsterImage;
 
-    private ListView<Label> playerInfo;
+//    private ListView<Label> playerInfo;
 
     private Integer startTime = 20;
     private Integer seconds = startTime;
 
     private Timeline timeline;
     private final Random random = new Random();
+    
+    private boolean changeStage;
 
     /**
      * @author Mostafa
@@ -72,6 +76,8 @@ public class GameStage extends Stage {
      */
     public GameStage(Player playerOfChoice){
         this.playerOfChoice = playerOfChoice;
+        
+        changeStage = true;
         
          // root layout of the game structure
         gameLayoutLeft = new VBox();
@@ -95,9 +101,9 @@ public class GameStage extends Stage {
         timeLabel = new Label("Ramaining time: 20");
 
         // create image for the player the user chooses
-        playerImage = new ImageView("file:resources\\pictures\\player\\player1.png");
-        playerImage.setFitHeight(500);
-        playerImage.setFitWidth(400);
+        playerImage = new ImageView(playerOfChoice.getImagePath());
+        playerImage.setFitHeight(700);
+        playerImage.setFitWidth(600);
 
         m = new Monster();
 
@@ -113,13 +119,9 @@ public class GameStage extends Stage {
         scoreLbl = new Label("Score: 0");
 
         // create a ListView and add the info to it
-        playerInfo = new ListView<>();
-        playerInfo.getItems().add(levelLbl);
-        playerInfo.getItems().add(playerNameLbl);
-        playerInfo.getItems().add(playerAttackStrengthLbl);
-        playerInfo.getItems().add(timeLabel);
-        playerInfo.getItems().add(monsterHealthLbl);
-        playerInfo.getItems().add(scoreLbl);
+        ObservableList info = FXCollections.observableArrayList(levelLbl, playerNameLbl, playerAttackStrengthLbl, timeLabel, monsterHealthLbl, scoreLbl);
+        ListView playerInfo = new ListView<>(info);
+        playerInfo.setPrefHeight(info.size() * 32);
 
         pauseBtn = new Button("Pause");
         pauseBtn.setPrefWidth(100);
@@ -244,11 +246,18 @@ public class GameStage extends Stage {
         int x;
         int y;
     }
+    
+    private void changeStage() {
+        GameOverStage stage = new GameOverStage(playerOfChoice, "You ran out of time!");
+        this.close();
+    }
 
     /**
      * @author Mostafa
      */
-    private void doTime() {
+    private boolean doTime() {
+        boolean returnValue = true;
+        
         time = new Timeline();
         time.setCycleCount(Timeline.INDEFINITE);
         if (time != null) {
@@ -268,30 +277,15 @@ public class GameStage extends Stage {
                     time.stop();
                     timeline.stop();
                     
-                    GameOverStage stage = new GameOverStage(playerOfChoice, "You ran out of time!");
+                    changeStage();
                 }
             }
 
         });
         time.getKeyFrames().add(frame);
         time.playFromStart();
-    }
-
-    /**
-     * @author Brianna McBurney
-     *
-     * When the player clicks on a character in the main menu, make that
-     * character the one that they will play the game as
-     * @param chosenPlayer The player the user has clicked on
-     */
-    private void setPlayerOfChoise(Player chosenPlayer) {
-        // set the chosen player as the plater of choice
-        playerOfChoice = chosenPlayer;
-        playerOfChoiceLbl.setText(chosenPlayer.getName());
-
-        // add the chosen players Image to the ImageView
-        Image image = new Image(playerOfChoice.getImagePath());
-        playerImage.setImage(image);
+        
+        return returnValue;
     }
 
     /**
