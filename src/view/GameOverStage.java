@@ -3,19 +3,13 @@ package view;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
+import javafx.scene.text.*;
+import javafx.stage.*;
 import javafx.util.Callback;
 import model.Player;
 import model.Score;
@@ -28,8 +22,8 @@ public class GameOverStage extends Stage {
 
     /**
      * @author Mostafa
-     * @param playerOfChoice
-     * @param gameOverMessage
+     * @param playerOfChoice is the player that the user chose 
+     * @param gameOverMessage is the message that will be different whether the user is out of time or wins the game
      */
     public GameOverStage(Player playerOfChoice, String gameOverMessage) {
         
@@ -42,7 +36,7 @@ public class GameOverStage extends Stage {
 
         Text message = new Text(gameOverMessage);
         message.setFont(Font.font("Verdava", 45));
-        message.setFill(Color.ROSYBROWN);
+        message.setFill(Color.RED);
         
         Label playerResults = new Label();
         playerResults.setText("Name: " + playerOfChoice.getName() + " \tScore: " + playerOfChoice.getScore());
@@ -50,22 +44,25 @@ public class GameOverStage extends Stage {
 
         Score s = new Score();
         ObservableList scoreList = s.getHighScores();
-        TableView<Score> scores = createScoreTable(scoreList);
-        scores.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        scores.setMaxWidth(500);
+        TableView<Score> scoresTable = createScoreTable(scoreList);
+        scoresTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        scoresTable.setMaxWidth(500);
+        
+        
+        //allow user to play again
+        Button playAgainBtn = new Button("Play Again");
+        playAgainBtn.setPrefWidth(500);
+        playAgainBtn.setPrefHeight(80);
+        playAgainBtn.setStyle("-fx-background-color: lightblue");
+        playAgainBtn.setOnAction(e -> playAgain());
 
         VBox layout = new VBox(10);
-        layout.getChildren().addAll(gameNameLbl, playerResults, message, scores);
+        layout.getChildren().addAll(gameNameLbl, playerResults, message, scoresTable, playAgainBtn);
         layout.setAlignment(javafx.geometry.Pos.CENTER);
         Scene scene = new Scene(layout, 1150, 850);
         this.setScene(scene);
         
-        Screen screen = Screen.getPrimary();
-        Rectangle2D bounds = screen.getVisualBounds();
-        this.setX(bounds.getMinX());
-        this.setY(bounds.getMinY());
-        this.setWidth(bounds.getWidth());
-        this.setHeight(bounds.getHeight());
+        this.setMaximized(true);
         
         this.show();
     }
@@ -84,7 +81,6 @@ public class GameOverStage extends Stage {
         TableColumn rankColumn = new TableColumn("RANK");
         rankColumn.setMinWidth(20);
 
-//        https://stackoverflow.com/questions/16384879/auto-numbered-table-rows-javafx
         // create new observableValue that gets it's value from the row number
         rankColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Score, String>, ObservableValue<String>>() {
             @Override
@@ -118,5 +114,11 @@ public class GameOverStage extends Stage {
 
         // Return the TableView
         return scores;
+    }
+
+    //playAgainBtn action that fires when user click on play again button
+    private void playAgain() {
+        MenuStage playAgain = new MenuStage();
+        this.close();
     }
 }

@@ -1,27 +1,14 @@
 package view;
 
 import java.util.Random;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
+import javafx.animation.*;
+import javafx.collections.*;
+import javafx.event.*;
 import javafx.geometry.Insets;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.Screen;
+import javafx.scene.control.*;
+import javafx.scene.image.*;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Monster;
@@ -29,55 +16,53 @@ import model.Player;
 import model.Score;
 
 /**
- *
- * @author Brianna McBurney
+ * @authors: Stage split to a new class by Brianna McBurney 
+ * Created by Mostafa
  */
 public class GameStage extends Stage {
 
-    private Button pauseBtn;
-    private Button resumeBtn;
+    //controls that used in all methods through this class
+    private final Button pauseBtn;
+    private final Button resumeBtn;
 
     private TranslateTransition transition;
     private Timeline time;
 
     private static int levelCount;
 
-    private Label levelLbl;
-    private Label playerNameLbl;
-    private Label playerAttackStrengthLbl;
-    private Label timeLabel;
-    private Label monsterHealthLbl;
-    private Label scoreLbl;
+    private final Label levelLbl;
+    private final Label playerNameLbl;
+    private final Label playerAttackStrengthLbl;
+    private final Label timeLabel;
+    private final Label monsterHealthLbl;
+    private final Label scoreLbl;
 
-    private Player playerOfChoice;
+    private final Player playerOfChoice;
     private Monster currentMonster;
     private Monster m;
-    
-    private VBox gameLayoutLeft;
-    private VBox gameLayoutRight;
 
-    private ImageView playerImage;
-    private ImageView monsterImage;
+    private final VBox gameLayoutLeft;
+    private final VBox gameLayoutRight;
 
-    private Integer startTime = 20;
+    private final ImageView playerImage;
+    private final ImageView monsterImage;
+
+    private final Integer startTime = 20;
     private Integer seconds = startTime;
 
-    private Timeline timeline;
+    private final Timeline timeline;
     private final Random random = new Random();
-    
-    private boolean changeStage;
 
     /**
      * @author Mostafa
-     * 
+     *
      * @param playerOfChoice
      */
-    public GameStage(Player playerOfChoice){
+    public GameStage(Player playerOfChoice) {
         this.playerOfChoice = playerOfChoice;
+
         
-        changeStage = true;
-        
-         // root layout of the game structure
+        // root layout of the game structure
         gameLayoutLeft = new VBox();
         gameLayoutLeft.setPadding(new Insets(10));
         gameLayoutLeft.setStyle("-fx-background-color: lightBlue");
@@ -117,18 +102,24 @@ public class GameStage extends Stage {
 
         scoreLbl = new Label("Score: 0");
 
-        // create a ListView and add the info to it
+        // create a ListView as well as a observable list and add the info to it
         ObservableList info = FXCollections.observableArrayList(levelLbl, playerNameLbl, playerAttackStrengthLbl, timeLabel, monsterHealthLbl, scoreLbl);
         ListView playerInfo = new ListView<>(info);
         playerInfo.setPrefHeight(info.size() * 32);
+        playerInfo.setMouseTransparent(true);
+        playerInfo.setFocusTraversable(false);
 
+        // instanciate pause and resume buttons and their action 
         pauseBtn = new Button("Pause");
-        pauseBtn.setPrefWidth(100);
+        pauseBtn.setPrefWidth(150);
+        pauseBtn.setPrefHeight(80);
         pauseBtn.setOnAction(e -> pause());
-        resumeBtn = new Button("resume");
-        resumeBtn.setPrefWidth(100);
+        resumeBtn = new Button("Resume");
+        resumeBtn.setPrefWidth(150);
+        resumeBtn.setPrefHeight(80);
         resumeBtn.setOnAction(e -> resume());
 
+        // create a HBox to hold pause and resume button
         HBox pauseNresumeLayout = new HBox(20);
         pauseNresumeLayout.setAlignment(javafx.geometry.Pos.CENTER);
         pauseNresumeLayout.getChildren().addAll(pauseBtn, resumeBtn);
@@ -152,18 +143,6 @@ public class GameStage extends Stage {
         gameLayoutOriginal.setStyle("-fx-background-color: DarkBlue");
         gameLayoutOriginal.getChildren().addAll(gameLayoutLeft, gameLayoutRight);
 
-        Scene game = new Scene(gameLayoutOriginal, 1450, 950);
-        this.setScene(game);
-        
-        Screen screen = Screen.getPrimary();
-        Rectangle2D bounds = screen.getVisualBounds();
-        this.setX(bounds.getMinX());
-        this.setY(bounds.getMinY());
-        this.setWidth(bounds.getWidth());
-        this.setHeight(bounds.getHeight());
-        
-        this.show();
-        
         timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
 
@@ -172,18 +151,27 @@ public class GameStage extends Stage {
         keyFrameAction();
 
         doTime();
+
+        Scene game = new Scene(gameLayoutOriginal);
+        this.setScene(game);
+
+        //to make the stage full screan 
+        this.setMaximized(true);
+
+        this.show();
+
     }
-    
+
     /**
      * @author Mostafa
+     * using an instance of key frame and TranslateTransition to control the animation 
      */
     private void keyFrameAction() {
         monsterImage.setLayoutX(100);
         monsterImage.setLayoutY(100);
-        Pos endPos = getRandomPos();
+        Pos endPos = new Pos();
 
         transition = new TranslateTransition();
-
         transition.setDuration(Duration.seconds(2));
         transition.setToX(endPos.x);
         transition.setToY(endPos.y);
@@ -191,10 +179,6 @@ public class GameStage extends Stage {
         transition.setAutoReverse(true);
         transition.setNode(monsterImage);
         transition.play();
-
-        monsterImage.setScaleX(1);
-        monsterImage.setScaleY(1);
-        monsterImage.setOpacity(1);
 
         // restart timeline with new values
         timeline.stop();
@@ -205,20 +189,7 @@ public class GameStage extends Stage {
     }
 
     /**
-     * @author Mostafa
-     * @return
-     */
-    private Pos getRandomPos() {
-        int x = random.nextInt(500);
-        int y = random.nextInt(400);
-        Pos p = new Pos();
-        p.x = x + 100;
-        p.y = y + 100;
-        return p;
-    }
-
-    /**
-     * @author Mostafa
+     * @author Mostafa sets of actions for pauseBnm
      */
     private void pause() {
         monsterImage.setOnMousePressed(null);
@@ -228,7 +199,7 @@ public class GameStage extends Stage {
     }
 
     /**
-     * @author Mostafa
+     * @author Mostafa sets of actions for resumeBtn
      */
     private void resume() {
         monsterImage.setOnMousePressed(event -> onMonsterAction());
@@ -238,44 +209,40 @@ public class GameStage extends Stage {
     }
 
     /**
-     * @author Mostafa
+     * @author Mostafa a short class to make random position for monster
+     * movement
      */
     private class Pos {
 
-        int x;
-        int y;
-    }
-    
-    private void changeStage() {
-        GameOverStage stage = new GameOverStage(playerOfChoice, "You ran out of time!");
-        this.close();
+        int x = random.nextInt(1100);
+        int y = random.nextInt(750);
     }
 
     /**
      * @author Mostafa
+     *
+     *
      */
     private boolean doTime() {
         boolean returnValue = true;
-        
+
         time = new Timeline();
         time.setCycleCount(Timeline.INDEFINITE);
         if (time != null) {
             time.stop();
         }
-        KeyFrame frame;
-        frame = new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+        KeyFrame frame = new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 seconds--;
                 timeLabel.setText("Remaining time: " + seconds.toString());
-                if (seconds <= 0) {
-                    // add the players score to the list in the file
+                if (seconds <= 0 || levelCount > 29) {
+                    // (Brianna)add the players score to the list in the file
                     Score sc = new Score();
                     sc.addNewScore(playerOfChoice.getName(), playerOfChoice.getScore());
-                    
+
                     time.stop();
-                    timeline.stop();
-                    
+
                     changeStage();
                 }
             }
@@ -283,8 +250,20 @@ public class GameStage extends Stage {
         });
         time.getKeyFrames().add(frame);
         time.playFromStart();
-        
+
         return returnValue;
+    }
+    
+    /**
+     * an instance of gameOverStage class to change stage when time is up
+     */
+    private void changeStage() {
+        if (levelCount > 29) {
+            GameOverStage stage = new GameOverStage(playerOfChoice, "You are winner. You beated all of monsters");            
+        } else {
+            GameOverStage stage = new GameOverStage(playerOfChoice, "You ran out of time!");
+        }
+        this.close();
     }
 
     /**
@@ -307,7 +286,8 @@ public class GameStage extends Stage {
 
         // increase the players attackStrength
         Player p = new Player();
-        p.levelUp(playerOfChoice);
+        playerOfChoice.setAttackStrength(p.levelUp(playerOfChoice));
+        playerAttackStrengthLbl.setText("Attack Strength: " + playerOfChoice.getAttackStrength());
 
         // increase the players score
         int remainingSec = seconds;

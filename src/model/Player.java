@@ -44,12 +44,19 @@ public class Player extends Character {
     
     
     /**
+     * @author Brianna McBurney
      * @param player
+     * @return updated attackStrength
      */
-    public void levelUp(Player player) {
-        player.setAttackStrength(attackStrength + 4 );
+    public int levelUp(Player player) {
+        int playerAttackStrength = (player.getAttackStrength()+4);
+        
+        return playerAttackStrength;
     }
-    
+    /**
+     * @author Brianna McBurney
+     * @return arrayList of player
+     */
     public static ArrayList<Player> getPlayers() {
         ArrayList<Player> playerList = new ArrayList<>();
         

@@ -1,56 +1,54 @@
 package view;
 
 import java.util.ArrayList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
+import javafx.geometry.*;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import model.Player;
 
 /**
  *
- * @author Brianna McBurney
+ * @author Stage split to a new class by Brianna McBurney Created by Mostafa
  */
 public class MenuStage extends Stage {
 
-    private TextField playerName;
-    
+    //controls that used in all methods through this class
+    private final TextField playerName;
+
     private ArrayList<Player> playerList;
-    
+
     private Player playerOfChoice;
 
-    private Button joinBtn;
-    private Button instructionBtn;
+    private final Button joinBtn;
+    private final Button instructionBtn;
 
-    private Label gameNameLbl;
-    private Label playerOfChoiceLbl;
-    
-    private VBox startPageLayout;
-    private HBox joinBtnLayout;
+    private final Label gameNameLbl;
+    private final Label playerOfChoiceLbl;
+    private final Label namePromptLbl;
+
+    private final VBox startPageLayout;
+    private final HBox joinNinstructionBtnLayout;
 
     /**
      * @author Mostafa
+     *
      */
     public MenuStage() {
+        //crating the original layout of the stage and add different layout to it
         startPageLayout = new VBox(10);
         startPageLayout.setStyle("-fx-background-color: black");
         startPageLayout.setPadding(new Insets(20));
 
-        gameNameLbl = new Label(" MONSTER  COMBAT");
-        gameNameLbl.setFont(Font.loadFont("file:resources/font/DragonForcE.ttf", 250));
+        gameNameLbl = new Label("   MONSTER     COMBAT");
+        gameNameLbl.setFont(Font.loadFont("file:resources/font/DragonForcE.ttf", 200));
         gameNameLbl.setTextFill(Color.web("#0076a9"));
-        
+
         playerName = new TextField();
         playerName.setStyle("-fx-border-color: white;" + "-fx-background-color: lightBlue");
         playerName.setPromptText("Enter your name");
@@ -59,78 +57,61 @@ public class MenuStage extends Stage {
         playerOfChoiceLbl.setTextFill(Color.web("#0076a9"));
         playerOfChoiceLbl.setFont(Font.font("Verdana", 40));
 
-        // create the player options to display 
+        // (Brianna) create the player options to display 
         playerList = new ArrayList<>();
         playerList = Player.getPlayers();
-        
-        ImageView p1Image = new ImageView(playerList.get(0).getImagePath());
-        p1Image.setFitHeight(450);
-        p1Image.setFitWidth(400);
-        Player p1 = playerList.get(0);
-        p1Image.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
-            // set the selected player as the player of choice
-            setPlayerOfChoise(p1);
-        });
-
-        ImageView p2Image = new ImageView(playerList.get(1).getImagePath());
-        p2Image.setFitHeight(450);
-        p2Image.setFitWidth(400);
-        Player p2 = playerList.get(1);
-        p2Image.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
-            // set the selected player as the player of choice
-            setPlayerOfChoise(p2);
-        });
-
-        ImageView p3Image = new ImageView(playerList.get(2).getImagePath());
-        p3Image.setFitHeight(450);
-        p3Image.setFitWidth(400);
-        Player p3 = playerList.get(2);
-        p3Image.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
-            // set the selected player as the player of choice
-            setPlayerOfChoise(p3);
-        });
 
         // grade HBox to hold player options and add the players Images to it
-        HBox playerImages = new HBox();
-        playerImages.setAlignment(Pos.CENTER);
-        playerImages.getChildren().addAll(p1Image, p2Image, p3Image);
+        HBox playerImagesLayout = new HBox();
+        playerImagesLayout.setAlignment(Pos.CENTER);
 
+        //making an arrayList of playes image and hold all three images of players.
+        ImageView[] playerImages = new ImageView[3];
+        //imageView for each image is being create in this loop
+        for (int i = 0; i < 3; i++) {
+            playerImages[i] = new ImageView(playerList.get(i).getImagePath());
+            playerImages[i].setFitHeight(450);
+            playerImages[i].setFitWidth(400);
+            playerImagesLayout.getChildren().add(playerImages[i]);//adding each image to the layout
+            Player choosenPlayer = playerList.get(i);
+            playerImages[i].addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+                // set the selected player as the player of choice
+                setPlayerOfChoise(choosenPlayer);
+            });
+        }
+
+        //creating an instace of a button(joinBtn) and resize it
         joinBtn = new Button("Join");
         joinBtn.setPrefHeight(200);
         joinBtn.setPrefWidth(200);
-        joinBtn.setOnAction(e -> onJoinClick());
+        joinBtn.setOnAction(e -> onJoinClick()); //setting an action for the button
 
-        // create button to allow user to view the instructions
+        // creating an istance of a button to allow user to view the instructions and resize the button
         instructionBtn = new Button("Instructions");
         instructionBtn.setPrefHeight(200);
         instructionBtn.setPrefWidth(200);
-        instructionBtn.setOnAction(e -> AlertBox.readInstructions(this));
+        instructionBtn.setOnAction(e -> AlertBox.readInstructions()); //setting an action for the button
 
-        joinBtnLayout = new HBox(700);
-        joinBtnLayout.getChildren().addAll(instructionBtn, joinBtn);
-        
-        HBox playerPrompt = new HBox(playerOfChoiceLbl);
-        playerPrompt.setAlignment(Pos.CENTER);
+        //creating an HBox to hold the join and instruction button and them them to the layout
+        joinNinstructionBtnLayout = new HBox(630);
+        joinNinstructionBtnLayout.getChildren().addAll(instructionBtn, joinBtn);
 
-        startPageLayout.getChildren().addAll(gameNameLbl, playerName, playerPrompt, playerImages, joinBtnLayout);
+        HBox choosePlayerPrompt = new HBox(playerOfChoiceLbl);
+        choosePlayerPrompt.setAlignment(Pos.CENTER);
 
-        Scene startUpScene = new Scene(startPageLayout, 1250, 850);
+        //creting an instance of label to promp user to enter name
+        namePromptLbl = new Label("Please enter your name");
+        namePromptLbl.setTextFill(Color.web("#0076a9"));
+        namePromptLbl.setFont(Font.font("Verdana", 40));
+        startPageLayout.getChildren().addAll(gameNameLbl, namePromptLbl, playerName, choosePlayerPrompt, playerImagesLayout, joinNinstructionBtnLayout);
+
+        Scene startUpScene = new Scene(startPageLayout);
         this.setScene(startUpScene);
 
-        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds(); //to make the stage center
-        this.setX((primScreenBounds.getWidth() - this.getWidth()) / 2); //to make the stage center
-        this.setY((primScreenBounds.getHeight() - this.getHeight()) / 2); // to make the stage center
-        
-        Screen screen = Screen.getPrimary();
-        Rectangle2D bounds = screen.getVisualBounds();
-        this.setX(bounds.getMinX());
-        this.setY(bounds.getMinY());
-        this.setWidth(bounds.getWidth());
-        this.setHeight(bounds.getHeight());
-        
+        this.setMaximized(true);//to meke the stage full screan 
+
         this.show();
     }
-    
 
     /**
      * @author Brianna McBurney
@@ -144,9 +125,9 @@ public class MenuStage extends Stage {
         playerOfChoice = chosenPlayer;
         playerOfChoiceLbl.setText(chosenPlayer.getName());
     }
-    
+
     /**
-     * @author Mostafa
+     * @author Mostafa this is an event for when user clicks join button
      */
     public void onJoinClick() {
         // make sure the user has entered a name for their player
@@ -156,7 +137,6 @@ public class MenuStage extends Stage {
             AlertBox.informAlert("Game Requirement", "You need to select a character \nbefore joining the game");
         } else {
             playerOfChoice.setName(playerName.getText());
-            
             GameStage gameStage = new GameStage(playerOfChoice);
             this.close();
         }
