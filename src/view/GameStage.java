@@ -202,7 +202,6 @@ public class GameStage extends Stage {
         transition.setToY(endPos.y);
 
         // set monster to move forever
-        transition.setCycleCount(Animation.INDEFINITE);
         transition.setAutoReverse(true);
 
         // apply the Node of monster image to the TranslateTransition
@@ -240,12 +239,13 @@ public class GameStage extends Stage {
      * @author Mostafa Allahmoradi
      */
     private void resume() {
+        // resume the animation
+        timeline.play();
+        transition.play();
+        
+        
         // allow the player to attack the monster again
         monsterImage.setOnMousePressed(event -> onMonsterAction());
-
-        // resume the animation
-        transition.play();
-        timeline.play();
 
         // start the timer again
         time.play();
