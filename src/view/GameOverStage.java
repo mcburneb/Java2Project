@@ -21,53 +21,62 @@ import model.Score;
 public class GameOverStage extends Stage {
 
     /**
+     * The stage that will be displayed when the game is over.
+     *
      * @author Mostafa
-     * @param playerOfChoice is the player that the user chose 
-     * @param gameOverMessage is the message that will be different whether the user is out of time or wins the game
+     *
+     * @param playerOfChoice is the player that the user chose
+     * @param gameOverMessage is the message that tell the user why the game is
+     * over
      */
     public GameOverStage(Player playerOfChoice, String gameOverMessage) {
-        
+
         this.initModality(Modality.APPLICATION_MODAL);
         this.setTitle("Game is over");
-        
-        Label gameNameLbl = new Label(" MONSTER  COMBAT");
-        gameNameLbl.setFont(Font.loadFont("file:resources/font/DragonForcE.ttf", 150));
-        gameNameLbl.setTextFill(Color.web("#0076a9"));
 
+        // create the label to display the game's name
+        Label lblGameName = new Label(" MONSTER  COMBAT");
+        lblGameName.setFont(Font.loadFont("file:resources/font/DragonForcE.ttf", 150));
+        lblGameName.setTextFill(Color.web("#0076a9"));
+
+        // create the text to display the gameOverMessage
         Text message = new Text(gameOverMessage);
         message.setFont(Font.font("Verdava", 45));
         message.setFill(Color.RED);
-        
+
+        // create label to display the players name and the score they achieved
         Label playerResults = new Label();
         playerResults.setText("Name: " + playerOfChoice.getName() + " \tScore: " + playerOfChoice.getScore());
         playerResults.setFont(Font.font("Verdava", 50));
 
-        Score s = new Score();
-        ObservableList scoreList = s.getHighScores();
+        Score score = new Score();
+        // create the list that will dispaly the previous scores
+        ObservableList scoreList = score.getHighScores();
         TableView<Score> scoresTable = createScoreTable(scoreList);
         scoresTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         scoresTable.setMaxWidth(500);
-        
-        
-        //allow user to play again
+
+        //create buton to allow user to play again
         Button playAgainBtn = new Button("Play Again");
         playAgainBtn.setPrefWidth(500);
         playAgainBtn.setPrefHeight(80);
         playAgainBtn.setStyle("-fx-background-color: lightblue");
         playAgainBtn.setOnAction(e -> playAgain());
 
+        // create the general layout to hold the elements of the stage
         VBox layout = new VBox(10);
-        layout.getChildren().addAll(gameNameLbl, playerResults, message, scoresTable, playAgainBtn);
+        layout.getChildren().addAll(lblGameName, playerResults, message, scoresTable, playAgainBtn);
         layout.setAlignment(javafx.geometry.Pos.CENTER);
         Scene scene = new Scene(layout, 1150, 850);
+        
+        // set the scene, make it full screan, and display the stage
         this.setScene(scene);
-        
         this.setMaximized(true);
-        
         this.show();
     }
-    
+
     /**
+     * Creating the table that will display the previous scores
      * @author Brianna McBurney
      *
      * @param scoreList Observable list holding all the scores retrieved from
@@ -116,9 +125,13 @@ public class GameOverStage extends Stage {
         return scores;
     }
 
-    //playAgainBtn action that fires when user click on play again button
+    /**
+     * playAgainBtn action that fires when user click on play again button
+     * @author Mostafa
+     */
     private void playAgain() {
-        MenuStage playAgain = new MenuStage();
+        // don't assign to return value because it will never be used
+        new MenuStage();
         this.close();
     }
 }

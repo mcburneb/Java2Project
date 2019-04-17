@@ -23,26 +23,7 @@ public class AlertBox {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(title);
         alert.setContentText(message);
-        alert.show();
-    }
-
-    /**
-     * @author Brianna McBurney
-     * creating an information-type alert box to be shown if the player has killed the monster Let the user know
-     * that they can now go to the next level
-     * @return If the user clicks 'next' or closes the alert return true to go
-     * to the next level
-     */
-    public static boolean nextLevelAlert() {
-        Alert levelAlert = new Alert(AlertType.INFORMATION, "You may now proceed to the next level", ButtonType.NEXT);
-        levelAlert.setTitle("DEAD MONSTER");
-        levelAlert.setHeaderText("You killed the monster!");
-        Optional<ButtonType> result = levelAlert.showAndWait();
-
-        if (result.isPresent() && result.get() == ButtonType.NEXT) {
-            return true;
-        }
-        return true;
+        alert.showAndWait();
     }
 
     /**
@@ -51,16 +32,21 @@ public class AlertBox {
      * Retrieve the instructions from the file and display them in an alert
      */
     public static void readInstructions() {
-
+        // get the file that holds the instruction
         File selectedFile = new File("src/fileResources/files/instructions.txt");
 
+        // create string builder to 
         StringBuilder builder = new StringBuilder();
 
         try {
+            // read the file contents with the scanner
             Scanner in = new Scanner(selectedFile);
 
+            // while there is still more content
             while (in.hasNextLine()) {
                 String lineIn = in.nextLine();
+                
+                // add the next line to the string builder
                 builder.append(lineIn).append("\n");
             }
 
@@ -68,19 +54,23 @@ public class AlertBox {
             Logger.getLogger(AlertBox.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        // create the alert to dispaly the instructions
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.getDialogPane().setMinWidth(Region.USE_PREF_SIZE);
         alert.setTitle("Instructions");
         alert.setHeaderText("Monster Combat Instructions");
         alert.setContentText("Click 'show details' to view instructions");
 
+        // create the text area to hold the instruction
         TextArea textArea = new TextArea(builder.toString());
         textArea.setEditable(false);
         textArea.setWrapText(true);
 
+        // add text area to a pane
         StackPane pane = new StackPane();
         pane.getChildren().add(textArea);
 
+        // add the instructions pane to the alert
         alert.getDialogPane().setExpandableContent(pane);
         alert.showAndWait();
     }

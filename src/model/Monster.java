@@ -14,13 +14,6 @@ public class Monster extends Character implements Attack {
     
     private static ArrayList<Monster> monsterArray;
 
-    /**
-     * Creates a Monster for the Player to fight.
-     * @param level The level in which the Monster will attack the Player
-     * @param name The name of the Monster
-     * @param health How much health the Monster has
-     * @param imagePath
-     */
     public Monster(String name, int level, int health, String imagePath) {
         super(name, imagePath);
         this.level = level;
@@ -42,25 +35,24 @@ public class Monster extends Character implements Attack {
     }
 
     /**
-     * Deplete the monsters health by the amount of attack the player has
+     * Lower the monster's health
+     * Overrides the damage method from the Attack interface
      * 
      * @param player
      * @param monster
      * @return The monster's new health
      */
     @Override
-    public String damage(Player player, Monster monster) {
+    public int damage(Player player, Monster monster) {
         // get the players attackStreghtn and the monsters current health
         int playerAttack = player.getAttackStrength();
         int monsterHealth = monster.getHealth();
 
         // deal the damage to the monsters health
         int newHealth = monsterHealth - playerAttack;
-        monster.setHealth(newHealth);
-
-        // return the monster's new health
-        String newHealthString = String.valueOf(newHealth);        
-        return newHealthString;
+        monster.setHealth(newHealth);    
+        
+        return newHealth;
     }
     
     /**

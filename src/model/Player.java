@@ -10,13 +10,6 @@ public class Player extends Character {
     private int attackStrength;
     private int score;
 
-    /**
-     * Creates a Player for the user to control.
-     * @param name The name of the Player
-     * @param attackStrength How much damage the Player's attack can do
-     * @param imagePath The file path to the image of the player
-     * @param score The score the player accumulates
-     */
     public Player(String name, int attackStrength, String imagePath, int score) {
         super(name, imagePath);
         this.attackStrength = attackStrength;
@@ -41,9 +34,8 @@ public class Player extends Character {
         this.score = score;
     }
     
-    
-    
     /**
+     * Level up the players attack strength
      * @author Brianna McBurney
      * @param player
      * @return updated attackStrength
@@ -54,19 +46,20 @@ public class Player extends Character {
         return playerAttackStrength;
     }
     /**
+     * Create the players that the user can pick from
      * @author Brianna McBurney
      * @return arrayList of player
      */
     public static ArrayList<Player> getPlayers() {
         ArrayList<Player> playerList = new ArrayList<>();
         
-        Player p1 = new Player("Player 1", 5, "file:resources\\pictures\\player\\player1.png", 0);
-        Player p2 = new Player("Player 2", 6, "file:resources\\pictures\\player\\player2.png", 0);
-        Player p3 = new Player("Player 3", 7, "file:resources\\pictures\\player\\player3.png", 0);
+        Player KrazetsPlayer = new Player("Krazets", 5, "file:resources\\pictures\\player\\player1.png", 0);
+        Player FegnoidPlayer = new Player("Fegnoid", 6, "file:resources\\pictures\\player\\player2.png", 0);
+        Player MildraPlayer = new Player("Mildra", 7, "file:resources\\pictures\\player\\player3.png", 0);
         
-        playerList.add(p1);
-        playerList.add(p2);
-        playerList.add(p3);
+        playerList.add(KrazetsPlayer);
+        playerList.add(FegnoidPlayer);
+        playerList.add(MildraPlayer);
         
         return playerList;
     }

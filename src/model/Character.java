@@ -13,9 +13,7 @@ public abstract class Character{
         this.imagePath = imagePath;
     }
     
-    public Character() {
-        
-    }
+    public Character() { }
 
     public String getName() {
         return name;

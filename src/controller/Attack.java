@@ -10,10 +10,11 @@ import model.Monster;
 public interface Attack {
 
     /**
+     * Cause damage to the monster
      * 
-     * @param player 
-     * @param monster
+     * @param player Player chosen by the user
+     * @param monster Current monster of each level
      * @return The new health of the monster
      */
-    public String damage(Player player, Monster monster);
+    public int damage(Player player, Monster monster);
 }
