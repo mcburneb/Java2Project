@@ -44,7 +44,7 @@ public class Monster extends Character implements Attack {
      */
     @Override
     public int damage(Player player, Monster monster) {
-        // get the players attackStreghtn and the monsters current health
+        // get the players attackStrength and the monsters current health
         int playerAttack = player.getAttackStrength();
         int monsterHealth = monster.getHealth();
 
@@ -82,9 +82,6 @@ public class Monster extends Character implements Attack {
         // the index of the monster for the next level
         int index = currentLevel-1;
         
-        // level 1 = monster at 0
-        // level 2 = monster at 1
-        // level 3 = monster at 2
         Monster nextMonster = null;
         try {
             nextMonster = monsterArray.get(index);            

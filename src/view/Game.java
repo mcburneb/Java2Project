@@ -17,6 +17,7 @@ public class Game extends Application{
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
+        // don't assign to return value because it will never be used
         new MenuStage();
     }
     

@@ -23,7 +23,7 @@ public class GameOverStage extends Stage {
     /**
      * The stage that will be displayed when the game is over.
      *
-     * @author Mostafa
+     * @author Mostafa Allahmoradi
      *
      * @param playerOfChoice is the player that the user chose
      * @param gameOverMessage is the message that tell the user why the game is
@@ -50,13 +50,13 @@ public class GameOverStage extends Stage {
         playerResults.setFont(Font.font("Verdava", 50));
 
         Score score = new Score();
-        // create the list that will dispaly the previous scores
+        // create the list that will display the previous scores
         ObservableList scoreList = score.getHighScores();
         TableView<Score> scoresTable = createScoreTable(scoreList);
         scoresTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         scoresTable.setMaxWidth(500);
 
-        //create buton to allow user to play again
+        // create button to get the game to start over
         Button playAgainBtn = new Button("Play Again");
         playAgainBtn.setPrefWidth(500);
         playAgainBtn.setPrefHeight(80);
@@ -69,7 +69,7 @@ public class GameOverStage extends Stage {
         layout.setAlignment(javafx.geometry.Pos.CENTER);
         Scene scene = new Scene(layout, 1150, 850);
         
-        // set the scene, make it full screan, and display the stage
+        // set the scene, make it full screen, and display the stage
         this.setScene(scene);
         this.setMaximized(true);
         this.show();
@@ -86,11 +86,11 @@ public class GameOverStage extends Stage {
         // set up the table to display the scores
         TableView<Score> scores = new TableView();
 
-        // Create the column to diplay the rank of the score
+        // Create the column to display the rank of the score
         TableColumn rankColumn = new TableColumn("RANK");
         rankColumn.setMinWidth(20);
 
-        // create new observableValue that gets it's value from the row number
+        // create new cell factory that gets its value from the row number
         rankColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Score, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Score, String> p) {
@@ -100,7 +100,7 @@ public class GameOverStage extends Stage {
         rankColumn.setSortable(false);
         rankColumn.setResizable(false);
 
-        // Create the column to display the name of the player that achived that score
+        // Create the column to display the name of the player that achieved that score
         TableColumn<Score, String> nameColumn = new TableColumn<>("NAME");
         nameColumn.setResizable(false);
         // pair the cellValue with the name from the Score object (has to match the name of the data field used when you create the Score)
@@ -127,7 +127,7 @@ public class GameOverStage extends Stage {
 
     /**
      * playAgainBtn action that fires when user click on play again button
-     * @author Mostafa
+     * @author Mostafa Allahmoradi
      */
     private void playAgain() {
         // don't assign to return value because it will never be used

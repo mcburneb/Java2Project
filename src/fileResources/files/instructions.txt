@@ -1,4 +1,4 @@
-Before you start the game you must enter a name and select your character. 
+Before you start the game, you must enter a name and select your character. 
 Once you have done that click the 'join' button.
 
 LEVEL LAYOUTS:
@@ -17,9 +17,9 @@ Your goal is to kill the monster within 20 seconds. You attack the monster by cl
 
 If the time runs out before the monster dies, the game is over. If the monster dies before time runs out, you will proceed to the next level.
 
-After you defeat each monster your characters attack strength will increase, your score will increase (see the 'Score' section for more details) and a new monster will appear for you to kill. Each new monster will have more health than the last but you will have the same amount of time for each level.
+After you defeat each monster your characters attack strength will increase, your score will increase (see the 'Score' section for more details) and a new monster will appear for you to kill. Each new monster will have more health than the last, but you will have the same amount of time for each level.
 
-The next level will have a different monster but it will have more health than the last. You will have the same amount of time as the last level to kill the monster.
+The next level will have a different monster, but it will have more health than the last. You will have the same amount of time as the last level to kill the monster.
 
 SCORE:
-After you complete each level you will receive 100 points + bonus points based on how much time is left when the monster dies.
+After you complete each level you will receive 100 points + bonus points based on how much time is left when the monster dies. 

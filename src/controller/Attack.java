@@ -5,7 +5,7 @@ import model.Monster;
 
 /**
  *
- * @author Mostafa
+ * @author Mostafa Allahmoradi
  */
 public interface Attack {
 

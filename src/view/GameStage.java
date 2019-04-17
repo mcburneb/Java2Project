@@ -18,7 +18,8 @@ import model.Score;
 /**
  * Creates the stage to run the game in
  *
- * @authors: Stage split to a new class by Brianna McBurney Created by Mostafa
+ * @authors: Stage split to a new class by Brianna McBurney 
+ * Created by Mostafa Allahmoradi
  */
 public class GameStage extends Stage {
 
@@ -57,7 +58,7 @@ public class GameStage extends Stage {
     /**
      * Sets up the stage for the game
      *
-     * @author Mostafa
+     * @author Mostafa Allahmoradi
      *
      * @param playerOfChoice The player that the user selected
      */
@@ -79,7 +80,7 @@ public class GameStage extends Stage {
         lblPlayerAttackStrength.setText("Attack Strength: " + playerOfChoice.getAttackStrength());
 
         // create the label to show the user how much time they have left
-        lblTime = new Label("Ramaining time: 20");
+        lblTime = new Label("Remaining time: 20");
 
         // create image to display the player the user chose
         playerImage = new ImageView(playerOfChoice.getImagePath());
@@ -162,7 +163,7 @@ public class GameStage extends Stage {
         // set the scene
         this.setScene(game);
 
-        //to make the stage full screan 
+        //to make the stage full screen 
         this.setMaximized(true);
 
         // start the animation to move the monster
@@ -180,7 +181,7 @@ public class GameStage extends Stage {
      * Using an instance of key frame and TranslateTransition to control the
      * animation for the monster and time
      *
-     * @author Mostafa
+     * @author Mostafa Allahmoradi
      */
     private void keyFrameAction() {
         // set the starting point for the monster
@@ -219,7 +220,7 @@ public class GameStage extends Stage {
     /**
      * Pauses the game when the user clicks the 'pause' button
      *
-     * @author Mostafa
+     * @author Mostafa Allahmoradi
      */
     private void pause() {
         // stop the user from attacking the monster while the game is paused
@@ -236,7 +237,7 @@ public class GameStage extends Stage {
     /**
      * Resumes the game
      *
-     * @author Mostafa
+     * @author Mostafa Allahmoradi
      */
     private void resume() {
         // allow the player to attack the monster again
@@ -253,7 +254,7 @@ public class GameStage extends Stage {
     /**
      * Gets random coordinates for the monster to move to
      *
-     * @author Mostafa
+     * @author Mostafa Allahmoradi
      */
     private class Pos {
 
@@ -264,7 +265,7 @@ public class GameStage extends Stage {
     /**
      * Controls the timer
      *
-     * @author Mostafa
+     * @author Mostafa Allahmoradi
      *
      */
     private void doTime() {
@@ -305,13 +306,13 @@ public class GameStage extends Stage {
      * Creating an instance of gameOverStage class to change stage when time is
      * up or the player wins the game with the appropriate message
      *
-     * @authro Mostafa
+     * @authro Mostafa Allahmoradi
      */
     private void changeStage() {
         if (levelCount > 29) { // player has completed all the levels
 
             // don't assign to return value because it will never be used
-            new GameOverStage(playerOfChoice, "You are winner. You beated all of monsters");
+            new GameOverStage(playerOfChoice, "You are winner. You beat all of monsters");
 
         } else { // player has run out of time
 
@@ -353,14 +354,14 @@ public class GameStage extends Stage {
         // make sure there is a monster for the next level
         if (monster.getMonsters(levelCount) != null) {
 
-            // get the monsterImage for the next nevel
+            // get the monsterImage for the next level
             currentMonster = monster.getMonsters(levelCount);
 
             // update ImageView with new monsterImage for next level
             Image newMonster = new Image(currentMonster.getImagePath());
             monsterImage.setImage(newMonster);
 
-            // udpate monsterHealthLbl with new monsters health
+            // update monsterHealthLbl with new monster's health
             lblMonsterHealth.setText("Monster Health: " + currentMonster.getHealth());
         }
     }
@@ -368,13 +369,13 @@ public class GameStage extends Stage {
     /**
      * If the player has clicked on the monster to 'attack' it, inflict damage
      * on the monster. Make sure the monster isn't dead then reflect those
-     * changes in the GUI. If the monster is dead change the monster image to
+     * changes in the GUI. If the monster is dead, change the monster image to
      * explosion and go to the next level
      *
      * @author Brianna McBurney
      */
     public void onMonsterAction() {
-        // cause 'damage' to the monsters health
+        // cause 'damage' to the monster's health
         int monsterHealth = monster.damage(playerOfChoice, currentMonster);
 
         // check and see if the monster still has health
@@ -392,12 +393,12 @@ public class GameStage extends Stage {
             // call method to display the alert that the player has killed the monster and can go to the next level
             AlertBox.informAlert("DEAD MONSTER", "You killed the monster! You may now proceed to the next level");
 
-            // resume the game after desplaying the alert box
+            // resume the game after displaying the alert box
             resume();
             // chaneg levels
             changeLevel();
 
-            // reusme the timer
+            // resume the timer
             time.play();
         }
     }

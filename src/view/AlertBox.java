@@ -4,18 +4,18 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.*;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 
 /**
- * @author Mostafa
+ * @author Mostafa Allahmoradi
  */
 public class AlertBox {
 
     /**
      * Creating an information-type alert box 
+     * @author Mostafa Allahmoradi
+     * 
      * @param title to passed into this method to make it multi-functional
      * @param message to passed into this method to make it multi-functional
      */
@@ -35,7 +35,7 @@ public class AlertBox {
         // get the file that holds the instruction
         File selectedFile = new File("src/fileResources/files/instructions.txt");
 
-        // create string builder to 
+        // create string builder to hold the instructions
         StringBuilder builder = new StringBuilder();
 
         try {
@@ -54,7 +54,7 @@ public class AlertBox {
             Logger.getLogger(AlertBox.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        // create the alert to dispaly the instructions
+        // create the alert to display the instructions
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.getDialogPane().setMinWidth(Region.USE_PREF_SIZE);
         alert.setTitle("Instructions");

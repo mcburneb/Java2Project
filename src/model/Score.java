@@ -131,7 +131,7 @@ public class Score {
                 // create JSONarray to hold the scores
                 JSONArray oldScoreList = (JSONArray) root.get("highScores");
 
-                // put scores into an array: each name+score will be an object in the array
+                // put scores into an array: each name and score will be an object in the array
                 for (int i = 0; i < oldScoreList.size(); i++) {
                     updatedScoreList.add((JSONObject) oldScoreList.get(i));
                 }
@@ -191,7 +191,6 @@ public class Score {
 
     /**
      * Sort the scores from highest to lowest
-     * @author Brianna McBurney 
      */
     public class scoreComparator implements Comparator<JSONObject> {
 

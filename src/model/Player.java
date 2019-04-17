@@ -41,7 +41,7 @@ public class Player extends Character {
      * @return updated attackStrength
      */
     public int levelUp(Player player) {
-        int playerAttackStrength = (player.getAttackStrength()+4);
+        int playerAttackStrength = (player.getAttackStrength()+2);
         
         return playerAttackStrength;
     }

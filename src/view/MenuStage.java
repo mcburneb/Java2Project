@@ -14,8 +14,8 @@ import model.Player;
 
 /**
  *
- * @author Stage split to a new class by Brianna McBurney \
- * Created by Mostafa
+ * @author Stage split to a new class by Brianna McBurney
+ * Created by Mostafa Allahmoradi
  */
 public class MenuStage extends Stage {
 
@@ -34,10 +34,10 @@ public class MenuStage extends Stage {
     private final Label lblNamePrompt;
 
     private final VBox startPageLayout;
-    private final HBox joinNinstructionBtnLayout;
+    private final HBox joinAndInstructionBtnLayout;
 
     /**
-     * @author Mostafa
+     * @author Mostafa Allahmoradi
      *
      */
     public MenuStage() {
@@ -56,7 +56,7 @@ public class MenuStage extends Stage {
         playerName.setStyle("-fx-border-color: white;" + "-fx-background-color: lightBlue");
         playerName.setPromptText("Enter your name");
 
-        // create label to dispaly the prompt for the user to chose a player
+        // create label to display the prompt for the user to choose a player
         lblChosePlayerPrompt = new Label("Choose a player");
         lblChosePlayerPrompt.setTextFill(Color.web("#0076a9"));
         lblChosePlayerPrompt.setFont(Font.font("Verdana", 40));
@@ -69,7 +69,7 @@ public class MenuStage extends Stage {
         HBox playerImagesLayout = new HBox();
         playerImagesLayout.setAlignment(Pos.CENTER);
 
-        //create arrayList to sotre the player's images
+        //create arrayList to store the player's images
         ImageView[] playerImages = new ImageView[3];
         
         //create an imageView for each players image
@@ -85,35 +85,35 @@ public class MenuStage extends Stage {
             });
         }
 
-        //creating an instace of a button (joinBtn) and resize it
+        //creating an instance of a button (joinBtn) and resize it
         joinBtn = new Button("Join");
         joinBtn.setPrefHeight(200);
         joinBtn.setPrefWidth(200);
         joinBtn.setOnAction(e -> onJoinClick()); //setting an action for the button
 
-        // creating an istance of a button to allow user to view the instructions and resize the button
+        // creating an instance of a button to allow user to view the instructions and resize the button
         instructionBtn = new Button("Instructions");
         instructionBtn.setPrefHeight(200);
         instructionBtn.setPrefWidth(200);
         instructionBtn.setOnAction(e -> AlertBox.readInstructions()); //setting an action for the button
 
-        //creating an HBox to hold the join and instruction button and them them to the layout
-        joinNinstructionBtnLayout = new HBox(630);
-        joinNinstructionBtnLayout.getChildren().addAll(instructionBtn, joinBtn);
+        //creating an HBox to hold the join and instruction button and them to the layout
+        joinAndInstructionBtnLayout = new HBox(630);
+        joinAndInstructionBtnLayout.getChildren().addAll(instructionBtn, joinBtn);
 
         HBox choosePlayerPrompt = new HBox(lblChosePlayerPrompt);
         choosePlayerPrompt.setAlignment(Pos.CENTER);
 
-        //creting an instance of label to promp user to enter name
+        // creating an instance of label to prompt user to enter name
         lblNamePrompt = new Label("Please enter your name");
         lblNamePrompt.setTextFill(Color.web("#0076a9"));
         lblNamePrompt.setFont(Font.font("Verdana", 40));
-        startPageLayout.getChildren().addAll(lblGameName, lblNamePrompt, playerName, choosePlayerPrompt, playerImagesLayout, joinNinstructionBtnLayout);
+        startPageLayout.getChildren().addAll(lblGameName, lblNamePrompt, playerName, choosePlayerPrompt, playerImagesLayout, joinAndInstructionBtnLayout);
 
         Scene startUpScene = new Scene(startPageLayout);
         this.setScene(startUpScene);
 
-        this.setMaximized(true); //make the stage full screan 
+        this.setMaximized(true); //make the stage full screen 
 
         this.show();
     }
@@ -133,7 +133,7 @@ public class MenuStage extends Stage {
 
     /**
      * Method called when the user clicks the 'join' button
-     * @author Mostafa 
+     * @author Mostafa Allahmoradi
      */
     public void onJoinClick() {
         // make sure the user has entered a name for their player
